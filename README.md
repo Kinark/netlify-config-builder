@@ -1,0 +1,1 @@
+A dead-simple react/sass boilerplate.
