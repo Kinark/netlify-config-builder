@@ -1,12 +1,25 @@
 {
    "name": "elara-boilerplate",
    "version": "1.0.0",
-   "description": "A simple react/sass boilerplate.",
+   "description": "A dead-simple react/sass boilerplate.",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "webpack-dev-server --port 8080 --config ./config/webpack.config.js",
       "build": "webpack -p --config ./config/webpack.config.prod.js"
    },
+   "repository": {
+     "type": "git",
+     "url": "git+https://github.com/Kinark/Elara.git"
+   },
+   "keywords": [
+     "boilerplate",
+     "react",
+     "sass"
+   ],
+   "bugs": {
+     "url": "https://github.com/Kinark/Elara/issues"
+   },
+   "homepage": "https://github.com/Kinark/Elara#readme",
    "author": "Igor Marcossi",
    "license": "ISC",
    "devDependencies": {
