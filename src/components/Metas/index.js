@@ -3,46 +3,50 @@ import PropTypes from 'prop-types';
 import {Helmet} from "react-helmet";
 
 export const Cover = (props) => {
+   const cover = props.children;
    return (
       <Helmet>
-         <meta property="og:image" content={props.content} />
-         <meta name="twitter:image" content={props.content} />
+         <meta property="og:image" content={cover} />
+         <meta name="twitter:image" content={cover} />
       </Helmet>
    )
 }
 
 Cover.propTypes = {
-   content: PropTypes.object.isRequired
+   children: PropTypes.object.isRequired
 }
 
 export const Description = (props) => {
+   const desc = props.children;
    return (
       <Helmet>
-         <meta name="description" content={props.content} />
-         <meta property="og:description" content={props.content} />
-         <meta name="twitter:description" content={props.content} />
+         <meta name="description" content={desc} />
+         <meta property="og:description" content={desc} />
+         <meta name="twitter:description" content={desc} />
       </Helmet>
    )
 }
 
 Description.propTypes = {
-   content: PropTypes.string.isRequired
+   children: PropTypes.string.isRequired
 }
 
 export const Title = (props) => {
+   const title = props.children;
    return (
       <Helmet>
-         <meta property="og:title" content={props.content} />
-         <meta property="og:site_name" content={props.content} />
-         <meta name="twitter:title" content={props.content} />
-         <meta name="apple-mobile-web-app-title" content={props.content} />
-         <meta name="application-name" content={props.content} />
+         <title>{title}</title>
+         <meta property="og:title" content={title} />
+         <meta property="og:site_name" content={title} />
+         <meta name="twitter:title" content={title} />
+         <meta name="apple-mobile-web-app-title" content={title} />
+         <meta name="application-name" content={title} />
       </Helmet>
    )
 }
 
 Title.propTypes = {
-   content: PropTypes.string.isRequired
+   children: PropTypes.string.isRequired
 }
 
 export const Metas = (props) => {
