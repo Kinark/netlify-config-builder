@@ -12,5 +12,11 @@ module.exports = merge(common, {
    devServer: {
       historyApiFallback: true,
       disableHostCheck: true,
+      proxy: {
+         "/ajax": {
+            target: "http://localhost:8070/",
+            pathRewrite: {"^/ajax" : ""}
+         }
+      }
    },
 });
