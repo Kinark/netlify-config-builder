@@ -28,9 +28,8 @@ const ImageminPluginConfig = {
    }
 }
 
-process.env.NODE_ENV = 'production';
-
 module.exports = merge(common, {
+   mode: 'production',
    output: {
       path: path.resolve(__dirname, '../dist'),
       filename: 'static/js/bundle.js',
