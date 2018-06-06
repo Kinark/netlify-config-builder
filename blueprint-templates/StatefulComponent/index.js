@@ -1,7 +1,11 @@
 import React from 'react';
 import './styles.scss';
+import PropTypes from 'prop-types';
 
 export default class {{pascalCase name}} extends React.Component {
+   static propTypes = {
+
+   }
    constructor(props) {
       super(props);
       this.state = {

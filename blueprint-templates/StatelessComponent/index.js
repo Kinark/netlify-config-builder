@@ -1,25 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './styles.scss';
 
-export default class {{pascalCase name}} extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {
-         value: null,
-      };
-   }
+const {{pascalCase name}} = () => (
+   <div></div>
+)
 
-   componentDidMount() {
-   }
+{{pascalCase name}}.propTypes = {
 
-   componentWillUnmount() {
-   }
-
-   render() {
-      return (
-         <div>
-
-         </div>
-      );
-   }
 }
+
+export default {{pascalCase name}}
