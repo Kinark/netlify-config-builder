@@ -24,8 +24,6 @@ module.exports = {
    module: {
       rules: [
          { test: /\.(js|jsx)$/, use: [{loader: 'babel-loader', options: {cacheDirectory: true}}], exclude: /node_modules/ },
-         { test: /\.css$/, use: [ 'style-loader', 'css-loader' ] },
-         { test: /\.scss$/, use: [ 'style-loader', 'css-loader', 'sass-loader' ] },
          { test: /\.(png|jp(e*)g|svg|ico)$/, use: [ imgLoader ] },
       ],
    },

@@ -1,9 +1,12 @@
 const path = require('path');
+const glob = require('glob')
 
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const ManifestPlugin = require("webpack-manifest-plugin");
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const PurifyCSSPlugin = require('purifycss-webpack');
 
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
@@ -36,16 +39,19 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         // { test: /\.css$/, use: [ 'style-loader', 'css-loader', postCssLoader ] },
-         { test: /\.css$/, use: [ postCssLoader ] },
-         // { test: /\.scss$/, use: [ 'style-loader', 'css-loader', postCssLoader, 'sass-loader' ] },
-         { test: /\.scss$/, use: [ postCssLoader, 'sass-loader' ] },
+         { test: /\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader] },
+         { test: /\.scss$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader, 'sass-loader'] },
       ],
    },
    plugins: [
-      new CleanWebpackPlugin(['dist/*.*'], {root: path.resolve(__dirname, '../')}),
-      new ImageminPlugin(ImageminPluginConfig),
       new UglifyJsPlugin(),
+      new CleanWebpackPlugin(['dist/**/*'], { root: path.resolve(__dirname, '../') }),
+      new ImageminPlugin(ImageminPluginConfig),
       new ManifestPlugin(ManifestPluginConfig),
+      new MiniCssExtractPlugin({ filename: 'static/css/[name].css', chunkFilename: '[id].css' }),
+      new PurifyCSSPlugin({
+         paths: glob.sync(path.join(__dirname, '../src/**/*.js')),
+         purifyOptions: { info: true, minify: true }
+      }),
    ],
 });
