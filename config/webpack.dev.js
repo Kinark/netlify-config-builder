@@ -3,7 +3,15 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
 
-process.env.NODE_ENV = 'development';
+const cssLoader = {
+   loader: 'css-loader',
+   query: {
+      importLoaders: 1,
+      localIdentName: '[local]_[hash:base64:5]',
+      minimize: true,
+      modules: true
+   }
+}
 
 module.exports = merge(common, {
    mode: 'development',
@@ -13,8 +21,8 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-         { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+         { test: /\.css$/, use: ['style-loader', cssLoader] },
+         { test: /\.scss$/, use: ['style-loader', cssLoader, 'sass-loader'] },
       ],
    },
    devServer: {

@@ -25,9 +25,18 @@ const ManifestPluginConfig = {
 }
 
 const ImageminPluginConfig = {
-   disable: process.env.NODE_ENV !== 'production', // Disable during development
    pngquant: {
       quality: '95-100'
+   }
+}
+
+const cssLoader = {
+   loader: 'css-loader',
+   query: {
+      importLoaders: 1,
+      localIdentName: 'purify_[local]_[hash:base64:5]',
+      minimize: true,
+      modules: true
    }
 }
 
@@ -39,8 +48,8 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader] },
-         { test: /\.scss$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader, 'sass-loader'] },
+         { test: /\.css$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader] },
+         { test: /\.scss$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader, 'sass-loader'] },
       ],
    },
    plugins: [
@@ -51,7 +60,7 @@ module.exports = merge(common, {
       new MiniCssExtractPlugin({ filename: 'static/css/[name].css', chunkFilename: '[id].css' }),
       new PurifyCSSPlugin({
          paths: glob.sync(path.join(__dirname, '../src/**/*.js')),
-         purifyOptions: { info: true, minify: true }
+         purifyOptions: { info: true, minify: true, whitelist: ['*purify*'] }
       }),
    ],
 });
