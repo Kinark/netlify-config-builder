@@ -4,6 +4,7 @@ import './styles.scss';
 const {{ pascalCase name }} = () => {
    return (
       <div>
+         {{ pascalCase name }}
       </div>
    )
 }
@@ -29,7 +30,7 @@ export default {{ pascalCase name }};
 //    render() {
 //       return (
 //          <div>
-// 
+//             {{ pascalCase name }}
 //          </div>
 //       );
 //    }

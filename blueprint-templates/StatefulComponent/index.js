@@ -26,7 +26,7 @@ export default class {{pascalCase name}} extends React.Component {
    render() {
       return (
          <div>
-
+            {{pascalCase name}}
          </div>
       );
    }

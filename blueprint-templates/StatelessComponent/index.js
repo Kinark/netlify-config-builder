@@ -7,7 +7,9 @@ import styles from './styles.scss';
 let cx = classNames.bind(styles);
 
 const {{pascalCase name}} = props => (
-   <div></div>
+   <div>
+      {{pascalCase name}}
+   </div>
 )
 
 {{pascalCase name}}.propTypes = {
