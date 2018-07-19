@@ -29,9 +29,9 @@ module.exports = merge(common, {
       historyApiFallback: true,
       disableHostCheck: true,
       proxy: {
-         "/ajax": {
-            target: "http://localhost:8070/",
-            pathRewrite: { "^/ajax": "" }
+         '/ajax': {
+            target: 'http://localhost:8070/',
+            pathRewrite: { '^/ajax': '' }
          }
       }
    },
