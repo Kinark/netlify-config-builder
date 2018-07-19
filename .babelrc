@@ -1,8 +1,23 @@
 {
-    "presets":[
-        "env", "react"
-    ],
-    "plugins": [
-      "react-hot-loader/babel"
-   ]
+  "presets": [
+    ["env", {
+      "targets": { "node": 7 },
+      "useBuiltIns": true
+    }],
+    "stage-0",
+    "react"
+  ],
+  "plugins": ["add-module-exports", "react-hot-loader/babel"],
+  "env": {
+    "production": {
+      "presets": ["react-optimize"],
+      "plugins": ["dev-expression"]
+    },
+    "development": {
+      "plugins": [
+        "transform-class-properties",
+        "transform-es2015-classes"
+      ]
+    }
+  }
 }
