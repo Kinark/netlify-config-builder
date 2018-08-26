@@ -1,0 +1,25 @@
+.socialLink {
+   display: inline-block;
+   vertical-align: middle;
+   margin: 5px 15px;
+   svg {
+      opacity: 0.99;
+      transition: opacity .25s;
+   }
+   &:hover {
+      svg {
+         opacity: 0.75;
+      }
+   }
+   &:active {
+      svg {
+         opacity: 0.5;
+      }
+   }
+   &:first-child {
+      margin-left: 0;
+   }
+   &:last-child {
+      margin-right: 0;
+   }
+}

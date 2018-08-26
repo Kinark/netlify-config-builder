@@ -1,0 +1,39 @@
+.homeNavbar {
+   height: 105px;
+   line-height: 105px;
+   margin: auto;
+   left: 0; right: 0;
+   width: 80%;
+   text-transform: uppercase;
+   position: absolute;
+   bottom: 0;
+   border-top: solid 1px rgba(112,112,112,0.7);
+   ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      -webkit-margin-start: unset;
+      -webkit-margin-after: unset;
+      -webkit-margin-before: unset;
+      -webkit-margin-end: unset;
+      -webkit-padding-start: unset;
+      height: 100%;
+      li {
+         opacity: 0.65;
+         transition: opacity .25s;
+         display: inline-block;
+         list-style-type: none;
+         padding: 0;
+         &:hover, &.active {
+            opacity: 1;
+         }
+         &.active {
+            font-weight: 700;
+         }
+         a {
+            padding: 0 15px;
+            display: block;
+         }
+      }
+   }
+}

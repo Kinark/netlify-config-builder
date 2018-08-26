@@ -1,0 +1,55 @@
+*:focus {
+   outline: none !important;
+}
+
+@import url("~https://use.typekit.net/cca8vjy.css");
+
+html {
+   font-family: "museo-sans", "roboto", sans-serif;
+   font-style: normal;
+   font-weight: 300;
+}
+
+// $transitionTime: 1s;
+
+// .fade-enter, .fade-home-enter {
+//    position: fixed;
+//    top: -60px;
+//    left: 0;
+//    right: 0;
+//    opacity: 0;
+//    z-index: 1;
+// }
+// 
+// .fade-enter.fade-enter-active, .fade-home-enter.fade-home-enter-active {
+//    top: 0;
+//    opacity: 1;
+//    transition: all $transitionTime;
+// }
+// 
+// .fade-exit {
+//    opacity: 1
+// }
+// 
+// .fade-exit.fade-exit-active {
+//    opacity: 0;
+//    // top: -60px;
+//    transition: all $transitionTime;
+// }
+// 
+// .fade-home-exit {
+//    position: fixed;
+//    z-index: 0;
+//    top: 0;
+//    left: 0;
+//    right: 0;
+//    opacity: 1;
+//    z-index: 1;
+//    pointer-events: none;
+// }
+// 
+// .fade-home-exit.fade-home-exit-active {
+//    opacity: 0;
+//    top: -60px;
+//    transition: all $transitionTime;
+// }

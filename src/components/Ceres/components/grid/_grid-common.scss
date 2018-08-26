@@ -1,0 +1,107 @@
+.container {
+   box-sizing: border-box;
+   margin-left: auto;
+   margin-right: auto;
+   width: 95%;
+   max-width: 100%;
+   padding-right: 8px;
+   padding-left: 8px;
+   
+   @media #{$small-and-up} {width: $small-screen-max * 0.7301173402868318;} // (560px)
+   @media #{$medium-and-up} {width: $medium-screen-max * 0.7588294651866801;} // (752px)
+   @media #{$large-and-up} {width: $large-screen-max * 0.8140116763969975;} // (976px)
+   @media #{$extra-large-and-up} {width: $large-screen-max;} // (1200px)
+}
+
+.container-fluid {
+   padding-right: 16px;
+   padding-left: 16px;
+}
+
+.col .row {
+   margin-left: (-1 * $gutter-width / 2);
+   margin-right: (-1 * $gutter-width / 2);
+}
+
+@mixin common-row {
+   box-sizing: border-box;
+   margin-left: auto;
+   margin-right: auto;
+   margin-bottom: 20px;
+   &:after {
+      content: "";
+      display: table;
+      clear: both;
+   }
+}
+
+@mixin common-row-col {
+   box-sizing: border-box;
+   padding: 0 $gutter-width / 2;
+   @include grid-constructor("xs");
+   @media #{$small-and-up} {@include grid-constructor("s");}
+   @media #{$medium-and-up} {@include grid-constructor("m");}
+   @media #{$large-and-up} {@include grid-constructor("l");}
+   @media #{$extra-large-and-up} {@include grid-constructor("xl");}
+}
+
+/*********************
+Media Query Classes
+**********************/
+
+.hide-on-extra-small-only, .hide-on-extra-small-and-down {@media #{$extra-small-and-down}{display:none !important;}}
+.hide-on-small-only {@media #{$small-only}{display:none !important;}}
+.hide-on-small-and-down {@media #{$small-and-down}{display:none !important;}}
+.hide-on-small-and-up {@media #{$small-and-up}{display:none !important;}}
+.hide-on-med-only {@media #{$medium-only}{display:none !important;}}
+.hide-on-med-and-down {@media #{$medium-and-down}{display:none !important;}}
+.hide-on-med-and-up {@media #{$medium-and-up}{display:none !important;}}
+.hide-on-large-only {@media #{$large-only}{display:none !important;}}
+.hide-on-large-and-down {@media #{$large-and-down}{display:none !important;}}
+.hide-on-large-and-up {@media #{$large-and-up}{display:none !important;}}
+.hide-on-extra-large-only, .hide-on-extra-large-and-up {@media #{$extra-large-and-up}{display:none !important;}}
+
+.show-on-extra-small-only, .show-on-extra-small-and-down {@media #{$extra-small-and-down}{display:block !important;}}
+.show-on-small-only {@media #{$small-only}{display:block !important;}}
+.show-on-small-and-down {@media #{$small-and-down}{display:block !important;}}
+.show-on-small-and-up {@media #{$small-and-up}{display:block !important;}}
+.show-on-med-only {@media #{$medium-only}{display:block !important;}}
+.show-on-med-and-down {@media #{$medium-and-down}{display:block !important;}}
+.show-on-med-and-up {@media #{$medium-and-up}{display:block !important;}}
+.show-on-large-only {@media #{$large-only}{display:block !important;}}
+.show-on-large-and-down {@media #{$large-and-down}{display:block !important;}}
+.show-on-large-and-up {@media #{$large-and-up}{display:block !important;}}
+.show-on-extra-large-only, .show-on-extra-large-and-up {@media #{$extra-large-and-up}{display:block !important;}}
+
+.screen-detector {
+   pointer-events: none;
+   position: absolute;
+   left: -99999px;
+   bottom: -99999px;
+   &::after {
+      position: fixed;
+      pointer-events: none;
+      background-color: black;
+      color: white;
+      content: "Something's really wrong is happenning and you should call the CIA...";
+      padding: 3px 10px;
+      bottom: 0;
+      right: 0;
+      z-index: 99999999999999999999999999;
+      user-select: none;
+      @media #{$extra-small-and-down} {content: "Extra Small Screen (<=#{$extra-small-screen-max})";}
+      @media #{$small-only} {content: "Small Screen (>=#{$small-screen-min} && <=#{$small-screen-max})";}
+      @media #{$medium-only} {content: "Medium Screen (>=#{$medium-screen-min} && <=#{$medium-screen-max})";}
+      @media #{$large-only} {content: "Large Screen (>=#{$large-screen-min} && <=#{$large-screen-max})";}
+      @media #{$extra-large-and-up} {content: "Extra Large Screen (>#{$large-screen-max})";}
+   }
+}
+
+/*********************
+Center text on mobile
+**********************/
+.center-on-small-only {
+   @media #{$small-and-down} {
+      text-align: center;
+   }
+}

@@ -1,0 +1,42 @@
+.navbar {
+   height: 87px;
+   line-height: 87px;
+   width: 100%;
+   text-transform: uppercase;
+   background-color: rgba(255, 255, 255, 0.02);
+   border-bottom: solid 1px rgba(255, 255, 255, 0.12);
+   position: fixed;
+   top: 0;left: 0;right: 0;
+   color: #fff;
+   z-index: 2;
+   ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      -webkit-margin-start: unset;
+      -webkit-margin-after: unset;
+      -webkit-margin-before: unset;
+      -webkit-margin-end: unset;
+      -webkit-padding-start: unset;
+      height: 100%;
+      li {
+         opacity: 0.65;
+         background-color: rgba(255,255,255, 0);
+         transition: background-color .25s, opacity .25s;
+         display: inline-block;
+         list-style-type: none;
+         padding: 0;
+         &:hover, &.active {
+            opacity: 1;
+            background-color: rgba(255,255,255, 0.04);
+         }
+         &.active {
+            font-weight: 700;
+         }
+         a {
+            padding: 0 15px;
+            display: block;
+         }
+      }
+   }
+}

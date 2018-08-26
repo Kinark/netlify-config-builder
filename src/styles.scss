@@ -1,0 +1,8 @@
+.appColors {
+   background-color: #151122;
+   color: #C4C3C7;
+   transition: .25s background-color;
+   &.inverted {
+   background-color: #0F0F0F;
+   }
+}

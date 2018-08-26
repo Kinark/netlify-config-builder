@@ -1,13 +1,22 @@
 import React from 'react';
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import App from '~/App';
-import './styles.global.scss'
-// import { BrowserRouter, Route } from 'react-router-dom';
+import { Metas } from '~/components/Metas';
+import '~/components/ExtraColors';
+import Favicon from '~/components/Favicon';
+import { BrowserRouter, Route } from 'react-router-dom';
 
-const root = document.getElementById('root')
+// const title = 'The Last Flame';
+const description = 'The Last Flame is a indie game development company. We hope to lit your way and make you fall in love with our games :)';
+// const cover = "";
 
-render(<App />, root);
-
-if (module.hot) {
-   module.hot.accept()
-}
+ReactDOM.render(
+   <React.Fragment>
+      <Metas description={description} />
+      <Favicon />
+      <BrowserRouter>
+         <Route component={App} />
+      </BrowserRouter>
+   </React.Fragment>,
+   document.getElementById('root')
+);

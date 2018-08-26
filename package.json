@@ -1,7 +1,7 @@
 {
-   "name": "elara-boilerplate",
+   "name": "tlf-site",
    "version": "1.0.0",
-   "description": "A dead-simple react/sass boilerplate.",
+   "description": "The Last Flame is a indie game development company. We hope to lit your way and make you fall in love with our games :)",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "webpack-dev-server --hot --host 0.0.0.0 --port 8080 --config ./config/webpack.dev.js",
@@ -74,6 +74,8 @@
       "react": "^16.4.0",
       "react-dom": "^16.4.0",
       "react-helmet": "^5.2.0",
+      "react-router-dom": "^4.3.1",
+      "react-transition-group": "^2.4.0",
       "sweetalert": "^2.1.0"
    }
 }
