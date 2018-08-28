@@ -13,7 +13,6 @@ class PageTitle extends React.Component {
 
    render() {
       const { context } = this.props;
-      console.log(context)
       return (
          <div className={`${styles.pageTitle} ${context.inverted ? styles.inverted : ''} tk-europa weight-bold`}>
             <div className="container">

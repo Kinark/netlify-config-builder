@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '~/App';
 import { Metas } from '~/components/Metas';
-import '~/components/ExtraColors';
 import Favicon from '~/components/Favicon';
 import { BrowserRouter, Route } from 'react-router-dom';
 

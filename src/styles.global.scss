@@ -1,17 +1,60 @@
-*:focus {
-   outline: none !important;
-}
-
 @import url("~https://use.typekit.net/cca8vjy.css");
+:global {
+   *:focus {
+      outline: none !important;
+   }
 
-html {
-   font-family: "museo-sans", "roboto", sans-serif;
-   font-style: normal;
-   font-weight: 300;
+   html {
+      font-family: "museo-sans", "roboto", sans-serif;
+      font-style: normal;
+      font-weight: 300;
+      color: #C4C3C7;
+   }
+   html,
+   body,
+   #root {
+      height: 100%;
+   }
+
+   #root {
+      display: flex;
+      flex-direction: column;
+   }
+
+   #content {
+      flex: 1 0 auto;
+   }
+
+   #footer {
+      flex-shrink: 0;
+   }
+
+   .dead-blue {
+      background-color: #151122 !important;
+   }
+
+   .dead-blue-text {
+      color: #151122 !important;
+   }
+
+   .dead-blue-light {
+      background-color: #8A8891 !important;
+   }
+
+   .dead-blue-light-text {
+      color: #8A8891 !important;
+   }
+
+   .dead-blue-clear {
+      background-color: #C4C3C7 !important;
+   }
+
+   .dead-blue-clear-text {
+      color: #C4C3C7 !important;
+   }
 }
 
 // $transitionTime: 1s;
-
 // .fade-enter, .fade-home-enter {
 //    position: fixed;
 //    top: -60px;

@@ -19,7 +19,7 @@
    &.inverted {
       filter: grayscale(100%) contrast(104%);
    }
-   &+div {
+   &+* {
       position: relative;
       z-index: 1;
    }

@@ -38,7 +38,7 @@ export default class App extends React.Component {
       return (
          <AppContext.Provider value={{ inverted, appTitle, turnOnInverted, turnOffInverted, changeAppTitle }}>
             <Title>{appTitle}</Title>
-            <div className={`${styles.appColors} ${inverted ? styles.inverted : ''}`}>
+            <div id="content" className={`${styles.appColors} ${inverted ? styles.inverted : ''}`}>
                <Route path="/(.+)" component={Navbar} />
                <Route path="/(.+)" component={PageTitle} />
                <Switch>
@@ -48,6 +48,8 @@ export default class App extends React.Component {
                   <Route path="/games" component={Games} />
                   <Route path="/deeplake" component={Deeplake} />
                </Switch>
+            </div>
+            <div id="footer">
                <Route component={Footer} />
             </div>
             <div className="screen-detector" />

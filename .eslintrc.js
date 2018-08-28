@@ -22,7 +22,7 @@ module.exports = {
       'arrow-parens': [
          'off'
       ],
-      'compat/compat': 'error',
+      'compat/compat': 'off',
       'consistent-return': 'off',
       'comma-dangle': 'off',
       'generator-star-spacing': 'off',
