@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 import { Title } from '~/components/Metas';
 import { withContext } from '~/instances/context';
 
-import './styles.scss';
+// import GamesList from './components/GamesList';
+// import styles from './styles.scss';
 
-import Splash from './components/Splash';
-
-class Home extends React.Component {
+class Game extends React.Component {
    static propTypes = {
       context: PropTypes.shape({}).isRequired,
    }
@@ -21,11 +20,11 @@ class Home extends React.Component {
    render() {
       return (
          <React.Fragment>
-            <Title>The Last Flame</Title>
-            <Splash />
+            <Title></Title>
+            Game
          </React.Fragment>
       )
    }
 }
 
-export default withContext(Home);
+export default withContext(Game);

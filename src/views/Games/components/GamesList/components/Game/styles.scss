@@ -8,6 +8,7 @@
    align-items: center;
    text-align: center;
    margin: 50px 0;
+   animation: fadeIn 1s;
    .info {
       position: relative;
       width: 80%;
@@ -42,7 +43,21 @@
       height: 100%;
       top: 0;
       left: 0;
-      background: radial-gradient(ellipse at center, rgba(21, 17, 34, 0.1) 0%, rgba(21, 17, 34, 0.1) 1%, rgba(21, 17, 34, 0.1) 22%, rgba(21, 17, 34, 0.35) 50%, rgba(21, 17, 34, 1) 68%, rgba(21, 17, 34, 1) 100%);
       pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(21, 17, 34, 0.1) 0%, rgba(21, 17, 34, 0.1) 22%, rgba(21, 17, 34, 0.35) 50%, rgba(21, 17, 34, 1) 68%, rgba(21, 17, 34, 1) 100%);
+      background-color: rgba(21, 17, 34, 0);
+      transition: .25s background-color;
+   }
+   &:hover::before {
+      background-color: rgba(21, 17, 34, 0.3);
+   }
+}
+
+@keyframes fadeIn {
+   from {
+      opacity: 0;
+   }
+   to {
+      opacity: 1;
    }
 }

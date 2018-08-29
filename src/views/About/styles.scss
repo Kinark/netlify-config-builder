@@ -31,6 +31,7 @@
          transform-origin: top left;
          pointer-events: none;
          overflow: hidden;
+         background: linear-gradient(226.95deg, transparent 0%, transparent 829px, #fff 829px, #fff 100%);
          .clockWrapper {
             width: 1426px;
             height: 838px;
@@ -38,8 +39,7 @@
             top: -247px;
             transform: rotate(-329deg) rotate(16deg);
             left: 2085px;
-            overflow: hidden;
-            background: #060606;
+            overflow: hidden; // background: #060606;
             img {
                width: 1267px;
                transform: rotate(-16deg);
@@ -55,6 +55,19 @@
       font-size: 16px;
       .textWrapper {
          margin-top: 120px;
+         .staffMember {
+            line-height: normal;
+            span:nth-child(1) {
+               font-size: 19px;
+               display: block;
+
+               font-weight: 700;
+            }
+            span:nth-child(2) {
+               font-size: 17px;
+               color: #787878;
+            }
+         }
       }
    }
 }

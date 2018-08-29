@@ -59,12 +59,12 @@ class About extends React.Component {
                               <p>As a little company with a few assiduous members that are working really hard to make a dream come true, we feel kind of ashamed to write about ourselves.</p>
                               <p>So take our names and base functions:</p>
                               <div className="row">
-                                 <div className="col s4 xs12">Bruno Godoi<br />Programmer</div>
-                                 <div className="col s4 xs12">Bruno Godoi<br />Programmer</div>
+                                 <div className={`col s4 xs12 ${styles.staffMember}`}><span>Bruno Godoi</span><span>Programmer</span></div>
+                                 <div className={`col s4 xs12 ${styles.staffMember}`}><span>Ernesto Junior</span><span>Illustrator</span></div>
                               </div>
                               <div className="row">
-                                 <div className="col s4 xs12">Bruno Godoi<br />Programmer</div>
-                                 <div className="col s4 xs12">Bruno Godoi<br />Programmer</div>
+                                 <div className={`col s4 xs12 ${styles.staffMember}`}><span>Igor Marcossi</span><span>Writer & WebDev</span></div>
+                                 <div className={`col s4 xs12 ${styles.staffMember}`}><span>Matheus Augusto</span><span>Writer</span></div>
                               </div>
                            </div>
                         </div>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withContext } from '~/instances/context';
 
 import GamesList from './components/GamesList';
-import './styles.scss';
+// import styles from './styles.scss';
 
 class Games extends React.Component {
    static propTypes = {

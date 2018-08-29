@@ -12,6 +12,7 @@ module.exports = {
       node: true
    },
    rules: {
+      'no-plusplus': 'off',
       'class-methods-use-this': [0, { exceptMethods: ['getDataFromRpc'] }],
       'max-len': 0,
       'object-curly-newline': 0,

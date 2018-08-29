@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
+import Repeat from '~/utils/Repeat';
 import fetchGames from '~/services/fetchGames';
 
 import GameLoading from './components/GameLoading'
@@ -18,11 +19,11 @@ export default class GamesList extends React.Component {
    }
 
    componentDidMount() {
-      fetchGames(this.activeAxios.token).then(games => this.injectGames(games)).catch()
+      fetchGames(this.activeAxios.token).then(games => this.injectGames(games)).catch(e => {console.log(e)})
    }
 
    componentWillUnmount() {
-      this.activeAxios.cancel()
+      this.activeAxios.cancel('Canceled by the user.')
    }
 
    injectGames(games) {
@@ -31,7 +32,7 @@ export default class GamesList extends React.Component {
 
    render() {
       const { loading, games } = this.state;
-      if (loading) return <div className="container"><GameLoading /></div>
+      if (loading) return <div className="container"><Repeat times={4} component={GameLoading} /></div>
       return (
          <div className={`${styles.gameList} container`}>
             {games.map(gameData => <Game data={gameData} key={gameData.id} />)}
