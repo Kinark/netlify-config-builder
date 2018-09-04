@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Title } from '~/components/Metas';
 import { withContext } from '~/instances/context';
 
 import './styles.scss';
@@ -15,13 +14,12 @@ class Home extends React.Component {
 
    componentWillMount = () => {
       const { context } = this.props
-      context.changeAppTitle(null);
+      context.changeAppTitle('The Last Flame', false);
    }
 
    render() {
       return (
          <React.Fragment>
-            <Title>The Last Flame</Title>
             <Splash />
          </React.Fragment>
       )

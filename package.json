@@ -76,6 +76,7 @@
       "react-dom": "^16.4.0",
       "react-helmet": "^5.2.0",
       "react-router-dom": "^4.3.1",
+      "react-router-prop-types": "^1.0.4",
       "react-transition-group": "^2.4.0",
       "sweetalert": "^2.1.0"
    }

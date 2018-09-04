@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import styles from './styles.scss';
 
 import { withContext } from '~/instances/context';
-import { Title } from '~/components/Metas';
 
 class PageTitle extends React.Component {
    static propTypes = {
@@ -22,7 +21,6 @@ class PageTitle extends React.Component {
                   </div>
                </div>
             </div>
-            <Title>{context.appTitle}</Title>
          </div>
       );
    }

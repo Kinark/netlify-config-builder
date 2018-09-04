@@ -3,6 +3,7 @@ import React from 'react';
 export const AppContext = React.createContext({
    bw: false,
    appTitle: 'The Last Flame',
+   appTitleBar: true,
    turnOnInverted: () => { },
    turnOffInverted: () => { },
    changeAppTitle: () => { },
