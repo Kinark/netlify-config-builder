@@ -19,8 +19,6 @@ const imgLoader = {
 const fontLoader = {
    loader: 'url-loader',
    options: {
-      limit: 50000,
-      mimetype: 'application/font-woff',
       name: 'static/fonts/[name].[ext]',
    }
 }
@@ -33,8 +31,8 @@ module.exports = {
    module: {
       rules: [
          { test: /\.(js|jsx)$/, use: [{ loader: 'babel-loader', options: { cacheDirectory: true } }], exclude: /node_modules/ },
-         { test: /\.(png|jp(e*)g|svg|ico)$/, use: [imgLoader] },
-         { test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, use: [fontLoader] },
+         { test: /\.(png|jp(e*)g|svg|ico|gif)$/, use: [imgLoader] },
+         { test: /\.(ttf|eot|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, use: [fontLoader] },
       ],
    },
    plugins: [HtmlWebpackPluginConfig],
