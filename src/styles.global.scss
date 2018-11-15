@@ -1,57 +1,56 @@
-@import url("~https://use.typekit.net/cca8vjy.css");
-:global {
-   *:focus {
-      outline: none !important;
-   }
+@import url("./fonts/tlficons/style.css");
+@import url("https://use.typekit.net/cca8vjy.css");
 
-   html {
-      font-family: "museo-sans", "roboto", sans-serif;
-      font-style: normal;
-      font-weight: 300;
-      color: #C4C3C7;
-   }
-   html,
-   body,
-   #root {
-      height: 100%;
-   }
+*:focus {
+   outline: none !important;
+}
 
-   #root {
-      display: flex;
-      flex-direction: column;
-   }
+html {
+   font-family: "museo-sans", "roboto", sans-serif;
+   font-style: normal;
+   font-weight: 300;
+   color: #C4C3C7;
+}
 
-   #content {
-      flex: 1 0 auto;
-   }
+html, body, #root {
+   height: 100%;
+}
 
-   #footer {
-      flex-shrink: 0;
-   }
+#root {
+   display: flex;
+   flex-direction: column;
+}
 
-   .dead-blue {
-      background-color: #151122 !important;
-   }
+#content {
+   flex: 1 0 auto;
+}
 
-   .dead-blue-text {
-      color: #151122 !important;
-   }
+#footer {
+   flex-shrink: 0;
+}
 
-   .dead-blue-light {
-      background-color: #8A8891 !important;
-   }
+.dead-blue {
+   background-color: #151122 !important;
+}
 
-   .dead-blue-light-text {
-      color: #8A8891 !important;
-   }
+.dead-blue-text {
+   color: #151122 !important;
+}
 
-   .dead-blue-clear {
-      background-color: #C4C3C7 !important;
-   }
+.dead-blue-light {
+   background-color: #8A8891 !important;
+}
 
-   .dead-blue-clear-text {
-      color: #C4C3C7 !important;
-   }
+.dead-blue-light-text {
+   color: #8A8891 !important;
+}
+
+.dead-blue-clear {
+   background-color: #C4C3C7 !important;
+}
+
+.dead-blue-clear-text {
+   color: #C4C3C7 !important;
 }
 
 // $transitionTime: 1s;

@@ -53,7 +53,7 @@ export default class App extends React.Component {
                   <Route path="/contact" component={Contact} />
                   <Route path="/about" component={About} />
                   <Route path="/games" component={Games} />
-                  <Route path="/game/:id" component={Game} />
+                  <Route path="/game/:gameTitle" component={Game} />
                   <Route path="/deeplake" component={Deeplake} />
                </Switch>
             </div>

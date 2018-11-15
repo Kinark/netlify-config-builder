@@ -1,0 +1,273 @@
+@font-face {
+   font-family: 'tlficons';
+   src: url('./tlficons.eot?vinn7h');
+   src: url('./tlficons.eot?vinn7h#iefix') format('embedded-opentype'), url('./tlficons.ttf?vinn7h') format('truetype'), url('./tlficons.woff?vinn7h') format('woff'), url('./tlficons.svg?vinn7h#tlficons') format('svg');
+   font-weight: normal;
+   font-style: normal;
+}
+
+i {
+   color: inherit;
+   font-size: 24px;
+   /* vertical-align: middle; */
+   margin-right: 11px;
+   /* use !important to prevent issues with browser extensions that change fonts */
+   font-family: 'tlficons' !important;
+   speak: none;
+   font-style: normal;
+   font-weight: normal;
+   font-variant: normal;
+   text-transform: none;
+   line-height: 1;
+   /* Better Font Rendering =========== */
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+}
+
+/* [class^="icon-"]:before {
+   color: #fff;
+} */
+
+.icon-airplane:before {
+   content: "\e900";
+}
+
+.icon-alien:before {
+   content: "\e901";
+}
+
+.icon-alien-head:before {
+   content: "\e902";
+}
+
+.icon-banking-debit-machine:before {
+   content: "\e903";
+}
+
+.icon-banking-donation-2:before {
+   content: "\e904";
+}
+
+.icon-banking-spendings-1:before {
+   content: "\e905";
+}
+
+.icon-banking-spendings-2:before {
+   content: "\e906";
+}
+
+.icon-banking-spendings-3:before {
+   content: "\e907";
+}
+
+.icon-bitcoin-cloud:before {
+   content: "\e908";
+}
+
+.icon-bitcoin-laptop:before {
+   content: "\e909";
+}
+
+.icon-bitcoin-network:before {
+   content: "\e90a";
+}
+
+.icon-bitcoin-windows:before {
+   content: "\e90b";
+}
+
+.icon-box-2:before {
+   content: "\e90c";
+}
+
+.icon-box-handle-1:before {
+   content: "\e90d";
+}
+
+.icon-computer-screen-1:before {
+   content: "\e90e";
+}
+
+.icon-content-book-2:before {
+   content: "\e90f";
+}
+
+.icon-content-book-6:before {
+   content: "\e910";
+}
+
+.icon-content-bookmark-4:before {
+   content: "\e911";
+}
+
+.icon-crop-image:before {
+   content: "\e912";
+}
+
+.icon-file-landscape-new-1:before {
+   content: "\e913";
+}
+
+.icon-file-new-1:before {
+   content: "\e914";
+}
+
+.icon-file-new-2:before {
+   content: "\e915";
+}
+
+.icon-file-notes-document:before {
+   content: "\e916";
+}
+
+.icon-file-notes-new:before {
+   content: "\e917";
+}
+
+.icon-file-office-graph:before {
+   content: "\e918";
+}
+
+.icon-files-1:before {
+   content: "\e919";
+}
+
+.icon-files-2:before {
+   content: "\e91a";
+}
+
+.icon-files-3:before {
+   content: "\e91b";
+}
+
+.icon-food-chicken-drum-stick:before {
+   content: "\e91c";
+}
+
+.icon-food-double-burger:before {
+   content: "\e91d";
+}
+
+.icon-food-icecream-2:before {
+   content: "\e91e";
+}
+
+.icon-graduation-hat:before {
+   content: "\e91f";
+}
+
+.icon-hot-air-balloon:before {
+   content: "\e920";
+}
+
+.icon-hourglass:before {
+   content: "\e921";
+}
+
+.icon-origami-paper-bird:before {
+   content: "\e922";
+}
+
+.icon-picture-layer-1:before {
+   content: "\e923";
+}
+
+.icon-receipt-1:before {
+   content: "\e924";
+}
+
+.icon-rewards-gift:before {
+   content: "\e925";
+}
+
+.icon-rewards-medal-1:before {
+   content: "\e926";
+}
+
+.icon-rewards-pedestal:before {
+   content: "\e927";
+}
+
+.icon-rewards-trophy-5:before {
+   content: "\e928";
+}
+
+.icon-ring-planet:before {
+   content: "\e929";
+}
+
+.icon-send-to-back:before {
+   content: "\e92a";
+}
+
+.icon-send-to-front:before {
+   content: "\e92b";
+}
+
+.icon-shopping-basket-1:before {
+   content: "\e92c";
+}
+
+.icon-shopping-basket-2:before {
+   content: "\e92d";
+}
+
+.icon-shopping-basket-add:before {
+   content: "\e92e";
+}
+
+.icon-shopping-basket-check:before {
+   content: "\e92f";
+}
+
+.icon-shopping-basket-close:before {
+   content: "\e930";
+}
+
+.icon-shopping-basket-subtract:before {
+   content: "\e931";
+}
+
+.icon-video-camera-3:before {
+   content: "\e932";
+}
+
+.icon-video-clip-3:before {
+   content: "\e933";
+}
+
+.icon-video-clip-4:before {
+   content: "\e934";
+}
+
+.icon-video-games-gameboy:before {
+   content: "\e935";
+}
+
+.icon-video-games-pacman:before {
+   content: "\e936";
+}
+
+.icon-video-games-pacman-ghost:before {
+   content: "\e937";
+}
+
+.icon-volcanoe:before {
+   content: "\e938";
+}
+
+.icon-vote-heart-circle-1:before {
+   content: "\e939";
+}
+
+.icon-vote-thumbs-down:before {
+   content: "\e93a";
+}
+
+.icon-vote-thumbs-up:before {
+   content: "\e93b";
+}
+
+.icon-wallet:before {
+   content: "\e93c";
+}
