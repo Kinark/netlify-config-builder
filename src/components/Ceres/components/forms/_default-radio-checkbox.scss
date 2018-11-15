@@ -1,0 +1,47 @@
+@mixin default-checkers-styles($radius) {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      & + label {
+      position: relative;
+      display: block;
+      position: relative;
+      padding-left: calc(#{$checkers-size} + .6rem);
+      cursor: pointer;
+      &::before {
+         border-radius: $radius;
+         content: '';
+         position: absolute;
+         top: calc(50% - #{$checkers-size}/2);
+         left: 0;
+         width: $checkers-size;
+         height: $checkers-size;
+         border: 1px solid $checkers-border-color;
+         transition: .25s border-color;
+      }
+      &:hover::before {
+         border-color: $checkers-hover-color;
+      }
+      &::after {
+         border-radius: $radius;
+         content: '';
+         position: absolute;
+         top: calc(50% - #{$checkers-size}/4);
+         left: $checkers-size/4;
+         width: $checkers-size/2;
+         height: $checkers-size/2;
+         opacity: 0;
+         border: solid 0px #40c4ff;
+         transition: .25s border-width, .25s opacity;
+      }
+   }
+   &:checked + label {
+      &::before {
+         border-color: $checkers-fill-color !important;
+      }
+      &::after {
+         border-width: $checkers-size/4;
+         opacity: 1;
+      }
+   }
+}

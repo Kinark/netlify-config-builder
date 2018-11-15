@@ -1,0 +1,49 @@
+// Styling for input field wrapper
+.input-field {
+   position: relative;
+   margin-top: calc(1rem + #{$label-font-size});
+   margin-bottom: 1rem;
+   display: flex;
+   align-items: center;
+   
+   // Inline styles
+   &.inline {
+      display: inline-flex;
+      vertical-align: middle;
+      margin-left: 5px;
+      
+      input, .select-dropdown {
+         margin-bottom: 1rem;
+      }
+   }
+   
+   // Gutter spacing
+   &.col {
+      label {
+         left: $gutter-width / 2;
+      }
+   }
+   
+   & > label {
+      color: #76797d;
+      position: absolute;
+      top: -1*$label-font-size - 0.45*$label-font-size;
+      left: 0;
+      font-size: $label-font-size;
+      cursor: text;
+      transition: color .2s ease-out;
+      text-align: initial;
+   }
+   
+   // Prefix Icons
+   .prefix {
+      font-size: 2rem;
+      width: 3rem;
+      transition: color .2s;
+      color: #757575;
+      flex-shrink: 0;
+      cursor: default;
+   }
+   
+   .prefix ~ label { margin-left: 3rem; }
+}

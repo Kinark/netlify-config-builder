@@ -1,0 +1,26 @@
+.pageTitle {
+   height: 370px;
+   background-image: url(./images/Lifeless.png);
+   background-size: 1920px;
+   background-position: center bottom;
+   image-rendering: pixelated;
+   background-repeat: no-repeat;
+   color: #fff;
+   text-transform: uppercase;
+   display: flex;
+   align-items: center;
+   margin-bottom: -65px;
+   padding-top: 18px;
+   font-family: "europa", sans-serif;
+   font-style: normal;
+   font-weight: 700;
+   filter: grayscale(0%) contrast(100%);
+   transition: .25s filter;
+   &.inverted {
+      filter: grayscale(100%) contrast(104%);
+   }
+   &+* {
+      position: relative;
+      z-index: 1;
+   }
+}

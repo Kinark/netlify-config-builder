@@ -1,0 +1,37 @@
+/* Select Field
+========================================================================== */
+
+// select { display: none; }
+// select.browser-default { display: block; }
+
+select:not(.browser-default ) {
+   @extend %default-input-style;
+   text-transform: none;
+   // background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%), linear-gradient(to right, #ccc, #ccc);
+   // background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+   // background-size: 5px 5px, 5px 5px, 1px 1.5em;
+   // background-repeat: no-repeat;
+   cursor: pointer;
+}
+
+
+.input-field.select {
+   &::before {
+      content: "";
+      height: 2px;
+      width: 7px;
+      transform: rotate(45deg);
+      background-color: #808080;
+      position: absolute;
+      right: 30px;
+   }
+   &::after {
+      content: "";
+      height: 2px;
+      width: 7px;
+      transform: rotate(-45deg);
+      background-color: #808080;
+      position: absolute;
+      right: 26px;
+   }
+}

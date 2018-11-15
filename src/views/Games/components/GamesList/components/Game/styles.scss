@@ -1,0 +1,63 @@
+.game {
+   height: 500px;
+   background-size: cover;
+   background-position: center bottom;
+   position: relative;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   text-align: center;
+   margin: 50px 0;
+   animation: fadeIn 1s;
+   .info {
+      position: relative;
+      width: 80%;
+      max-width: 420px;
+      .logo {
+         height: 135px;
+         margin-bottom: 17px;
+      }
+      .meta {
+         color: white;
+         text-transform: uppercase;
+         font-size: 14px;
+         margin-bottom: 10px;
+         font-weight: 500;
+         text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.7);
+      }
+      .name,
+      .description {
+         color: #C4C3C7;
+         line-height: 26px;
+         margin: 0;
+      }
+      .name {
+         color: white;
+         font-size: 16px;
+      }
+   }
+   &::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, rgba(21, 17, 34, 0.1) 0%, rgba(21, 17, 34, 0.1) 22%, rgba(21, 17, 34, 0.35) 50%, rgba(21, 17, 34, 1) 68%, rgba(21, 17, 34, 1) 100%);
+      background-color: rgba(21, 17, 34, 0);
+      transition: .25s background-color;
+   }
+   &:hover::before {
+      background-color: rgba(21, 17, 34, 0.3);
+   }
+}
+
+@keyframes fadeIn {
+   from {
+      opacity: 0;
+   }
+   to {
+      opacity: 1;
+   }
+}

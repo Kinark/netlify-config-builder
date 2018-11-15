@@ -1,0 +1,73 @@
+.introduction {
+   font-size: 16px;
+   line-height: 29px;
+}
+
+.tlfLogo>* {
+   mix-blend-mode: exclusion;
+}
+
+.rotatedSection {
+   position: relative;
+   .viewportMask {
+      width: 100vw;
+      overflow: hidden;
+      position: absolute;
+      pointer-events: none;
+      top: -650px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: transparent;
+      .bigWhiteTriangle {
+         width: 3200px;
+         height: 2000px;
+         top: 1740px;
+         left: 55%;
+         right: 50%;
+         background-color: white;
+         position: absolute;
+         transform: rotate(329deg) translate(-50%, -50%);
+         transform-origin: top left;
+         pointer-events: none;
+         overflow: hidden;
+         background: linear-gradient(226.95deg, transparent 0%, transparent 829px, #fff 829px, #fff 100%);
+         .clockWrapper {
+            width: 1426px;
+            height: 838px;
+            position: absolute;
+            top: -247px;
+            transform: rotate(-329deg) rotate(16deg);
+            left: 2085px;
+            overflow: hidden; // background: #060606;
+            img {
+               width: 1267px;
+               transform: rotate(-16deg);
+            }
+         }
+      }
+   }
+   .content {
+      margin-top: 50px;
+      position: relative;
+      color: #0F0F10;
+      background: linear-gradient(to bottom, transparent 0%, transparent 750px, #fff 750px, #fff 100%);
+      font-size: 16px;
+      .textWrapper {
+         margin-top: 120px;
+         .staffMember {
+            line-height: normal;
+            span:nth-child(1) {
+               font-size: 19px;
+               display: block;
+
+               font-weight: 700;
+            }
+            span:nth-child(2) {
+               font-size: 17px;
+               color: #787878;
+            }
+         }
+      }
+   }
+}
