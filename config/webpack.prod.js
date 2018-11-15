@@ -48,8 +48,10 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.css$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader] },
-         { test: /\.scss$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader, 'sass-loader'] },
+         { test: /\.global\.css$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader] },
+         { test: /\.global\.(scss|sass)$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader, 'sass-loader'] },
+         { test: /^((?!\.global).)*\.css$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader] },
+         { test: /^((?!\.global).)*\.(scss|sass)$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader, 'sass-loader'] },
       ],
    },
    plugins: [
