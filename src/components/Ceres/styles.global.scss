@@ -1,39 +1,29 @@
 /* Required Variables/Some Mixins (don't mess up with the order) */
-:global {  
-   @import "./components/color-variables";
-   @import "./components/variables";
 
+@import "./components/color-variables";
+@import "./components/variables"; // /* Settings */
+@import "./components/global";
+@import "./components/normalize"; // /* Components */
+@import "./components/color-classes";
+@import "./components/grid/grid-flex";
+@import "./components/typography";
+@import "./components/table";
+@import "./components/helpers"; // @import "./components/fonts";
+// @import "./components/baloon-tooltip";
+// @import "./components/forms/forms";
+button:focus {
+   outline: none;
+}
 
-   // /* Settings */
-   @import "./components/global";
-   @import "./components/normalize";
+@import './components/forms/default-input-style';
+@import './components/forms/default-radio-checkbox';
 
-   // /* Components */
-   @import "./components/color-classes";
-   @import "./components/grid/grid-flex";
-   @import "./components/typography";
-   @import "./components/table";
-   @import "./components/helpers";
-   // @import "./components/fonts";
-   // @import "./components/baloon-tooltip";
-
-
-
-
-   // @import "./components/forms/forms";
-   button:focus {
-      outline: none;
-   }
-   @import './components/forms/default-input-style';
-   @import './components/forms/default-radio-checkbox';
-
-   @import './components/forms/input-fields';
-   @import './components/forms/input';
-   @import './components/forms/radio-buttons';
-   @import './components/forms/checkboxes';
-   @import './components/forms/select';
+@import './components/forms/input-fields';
+@import './components/forms/input';
+@import './components/forms/radio-buttons';
+@import './components/forms/checkboxes';
+@import './components/forms/select';
 
 
 
-   @import "./components/icons-material-design";
-} 
+@import "./components/icons-material-design";

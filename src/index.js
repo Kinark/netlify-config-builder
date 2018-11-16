@@ -8,6 +8,6 @@ const root = document.getElementById('root')
 render(<BrowserRouter><Route component={App} /></BrowserRouter>, root);
 
 if (module.hot) {
+   // console.clear()
    module.hot.accept()
-   console.clear()
 }

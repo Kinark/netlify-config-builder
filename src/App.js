@@ -26,6 +26,7 @@ export default class App extends React.Component {
       this.state = {
          inverted: false,
          appTitle: 'The Last Flame',
+         appTitleBar: true
       };
    }
 
@@ -33,31 +34,31 @@ export default class App extends React.Component {
 
    turnOffInverted = () => { this.setState({ inverted: false }); };
 
-   changeAppTitle = appTitle => { this.setState({ appTitle }); };
+   changeAppTitle = (appTitle, appTitleBar = true) => { this.setState({ appTitle, appTitleBar }); };
 
    render() {
-      const { inverted, appTitle } = this.state;
+      const { inverted, appTitle, appTitleBar } = this.state;
       const { turnOnInverted, turnOffInverted, changeAppTitle } = this;
       const description = 'The Last Flame is a indie game development company. We hope to lit your way and make you fall in love with our games :)';
       return (
-         <AppContext.Provider value={{ inverted, appTitle, turnOnInverted, turnOffInverted, changeAppTitle }}>
+         <AppContext.Provider value={{ inverted, appTitle, appTitleBar, turnOnInverted, turnOffInverted, changeAppTitle }}>
             <Favicon />
             <Title>{appTitle}</Title>
             <Metas description={description} />
             <div id="content" className={`${styles.appColors} ${inverted ? styles.inverted : ''}`}>
                <Route path="/(.+)" component={Navbar} />
-               {appTitle !== null && <PageTitle />}
+               {appTitleBar === true && <PageTitle />}
                <Switch>
                   <Route exact path="/" component={Home} />
                   <Route path="/contact" component={Contact} />
                   <Route path="/about" component={About} />
                   <Route path="/games" component={Games} />
-                  <Route path="/game/:id" component={Game} />
+                  <Route path="/game/:gameTitle" component={Game} />
                   <Route path="/deeplake" component={Deeplake} />
                </Switch>
             </div>
             <div id="footer">
-               <Route component={Footer} />
+               <Footer />
             </div>
             <div className="screen-detector" />
          </AppContext.Provider>

@@ -9,22 +9,20 @@ import Game from './components/Game'
 import styles from './styles.scss';
 
 export default class GamesList extends React.Component {
-   constructor(props) {
-      super(props);
-      this.state = {
-         games: [],
-         loading: true
-      };
-      this.activeAxios = axios.CancelToken.source()
+   state = {
+      games: [],
+      loading: true
    }
 
    componentDidMount() {
-      fetchGames(this.activeAxios.token).then(games => this.injectGames(games)).catch(e => {console.log(e)})
+      fetchGames(this.activeAxios.token).then(games => this.injectGames(games)).catch(e => { console.log(e) })
    }
 
    componentWillUnmount() {
       this.activeAxios.cancel('Canceled by the user.')
    }
+
+   activeAxios = axios.CancelToken.source()
 
    injectGames(games) {
       this.setState({ games, loading: false })

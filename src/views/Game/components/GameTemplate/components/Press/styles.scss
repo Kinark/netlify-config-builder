@@ -1,0 +1,17 @@
+.press {
+   .article {
+      display: block;
+      padding: 10px 5px;
+      border-bottom: solid 1px #2D2939;
+      opacity: 1;
+      transition: opacity 300ms;
+      &>div {
+         white-space: nowrap;
+         text-overflow: ellipsis;
+         overflow: hidden;
+      }
+      &:hover {
+         opacity: 0.75;
+      }
+   }
+}
