@@ -12,6 +12,7 @@ module.exports = {
       node: true
    },
    rules: {
+      'no-plusplus': 'off',
       'class-methods-use-this': [0, { exceptMethods: ['getDataFromRpc'] }],
       'max-len': 0,
       'object-curly-newline': 0,
@@ -22,7 +23,7 @@ module.exports = {
       'arrow-parens': [
          'off'
       ],
-      'compat/compat': 'error',
+      'compat/compat': 'off',
       'consistent-return': 'off',
       'comma-dangle': 'off',
       'generator-star-spacing': 'off',

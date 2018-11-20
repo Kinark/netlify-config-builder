@@ -1,11 +1,10 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
       "targets": { "node": 7 },
-      "useBuiltIns": true
+      "useBuiltIns": "usage"
     }],
-    "stage-0",
-    "react"
+    "@babel/preset-react"
   ],
   "plugins": ["add-module-exports", "react-hot-loader/babel"],
   "env": {
@@ -15,8 +14,7 @@
     },
     "development": {
       "plugins": [
-        "transform-class-properties",
-        "transform-es2015-classes"
+        "transform-class-properties"
       ]
     }
   }
