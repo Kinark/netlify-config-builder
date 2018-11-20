@@ -6,27 +6,25 @@ import styles from './styles.scss';
 
 let cx = classNames.bind(styles);
 
-export default class {{pascalCase name}} extends React.Component {
+export default class {{ pascalCase name }} extends React.Component {
    static propTypes = {
 
    }
-   constructor(props) {
-      super(props);
-      this.state = {
-         value: null,
-      };
+
+   state = {
+      value: null,
    }
 
-   componentDidMount() {
+   componentDidMount() => {
    }
 
-   componentWillUnmount() {
+   componentWillUnmount() => {
    }
 
    render() {
       return (
          <div>
-            {{pascalCase name}}
+            {{ pascalCase name }}
          </div>
       );
    }
