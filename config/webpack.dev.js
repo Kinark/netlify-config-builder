@@ -20,8 +20,10 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.css$/, use: ['style-loader', cssLoader] },
-         { test: /\.scss$/, use: ['style-loader', cssLoader, 'sass-loader'] },
+         { test: /\.global\.css$/, use: ['style-loader', 'css-loader'] },
+         { test: /\.global\.(scss|sass)$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+         { test: /^((?!\.global).)*\.css$/, use: ['style-loader', cssLoader] },
+         { test: /^((?!\.global).)*\.(scss|sass)$/, use: ['style-loader', cssLoader, 'sass-loader'] },
       ],
    },
    devServer: {
