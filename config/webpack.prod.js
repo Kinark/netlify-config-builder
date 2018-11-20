@@ -1,7 +1,7 @@
 const path = require('path');
 const glob = require('glob')
 
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const MinifyJsPlugin = require('babel-minify-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -55,7 +55,7 @@ module.exports = merge(common, {
       ],
    },
    plugins: [
-      new UglifyJsPlugin(),
+      new MinifyJsPlugin(),
       new CleanWebpackPlugin(['dist/**/*'], { root: path.resolve(__dirname, '../') }),
       new ImageminPlugin(ImageminPluginConfig),
       new ManifestPlugin(ManifestPluginConfig),
