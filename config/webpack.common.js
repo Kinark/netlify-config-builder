@@ -32,7 +32,7 @@ module.exports = {
       rules: [
          { test: /\.(js|jsx)$/, use: [{ loader: 'babel-loader', options: { cacheDirectory: true } }], exclude: /node_modules/ },
          { test: /\.(png|jp(e*)g|svg|ico|gif)$/, use: [imgLoader] },
-         { test: /\.(ttf|eot|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, use: [fontLoader] },
+         { test: /\.(otf|ttf|eot|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, use: [fontLoader] },
       ],
    },
    plugins: [HtmlWebpackPluginConfig],
