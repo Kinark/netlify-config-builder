@@ -12,6 +12,14 @@ const cssLoader = {
    }
 }
 
+const scssLoader = {
+   loader: 'sass-loader',
+   options: {
+      sourceMap: true,
+      sourceMapContents: false
+   }
+}
+
 module.exports = merge(common, {
    mode: 'development',
    devtool: 'cheap-module-source-map',
@@ -20,8 +28,8 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.global\.(css|scss|sass)$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
-         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: ['style-loader', cssLoader, 'sass-loader'] },
+         { test: /\.global\.(css|scss|sass)$/, use: ['style-loader', 'css-loader', 'resolve-url-loader', scssLoader] },
+         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: ['style-loader', cssLoader, 'resolve-url-loader', scssLoader] },
       ],
    },
    devServer: {

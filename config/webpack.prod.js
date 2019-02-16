@@ -40,6 +40,14 @@ const cssLoader = {
    }
 }
 
+const scssLoader = {
+   loader: 'sass-loader',
+   options: {
+      sourceMap: true,
+      sourceMapContents: false
+   }
+}
+
 module.exports = merge(common, {
    mode: 'production',
    output: {
@@ -48,8 +56,8 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.global\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader, 'sass-loader'] },
-         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader, 'sass-loader'] },
+         { test: /\.global\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader, 'resolve-url-loader', scssLoader] },
+         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader, 'resolve-url-loader', scssLoader] },
       ],
    },
    plugins: [
