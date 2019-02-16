@@ -2,25 +2,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js')
 
-const cssLoader = {
-   loader: 'css-loader',
-   query: {
-      importLoaders: 1,
-      localIdentName: '[local]_[hash:base64:5]',
-      minimize: true,
-      modules: true
-   }
-}
-
-const scssLoader = {
-   loader: 'sass-loader',
-   options: {
-      sourceMap: true,
-      sourceMapContents: false
-   }
-}
-
-module.exports = merge(common, {
+module.exports = merge.smart({
    mode: 'development',
    devtool: 'cheap-module-source-map',
    output: {
@@ -28,8 +10,8 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.global\.(css|scss|sass)$/, use: ['style-loader', 'css-loader', 'resolve-url-loader', scssLoader] },
-         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: ['style-loader', cssLoader, 'resolve-url-loader', scssLoader] },
+         { test: /\.global\.(css|scss|sass)$/, use: ['style-loader'] },
+         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: ['style-loader'] },
       ],
    },
    devServer: {
@@ -46,4 +28,4 @@ module.exports = merge(common, {
    plugins: [
       new webpack.NamedModulesPlugin(),
    ]
-});
+}, common);

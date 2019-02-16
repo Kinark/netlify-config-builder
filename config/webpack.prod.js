@@ -11,15 +11,6 @@ const PurifyCSSPlugin = require('purifycss-webpack');
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 
-const postCssLoader = {
-   loader: 'postcss-loader',
-   options: {
-      config: {
-         path: './config/postcss.config.js'
-      }
-   }
-}
-
 const ManifestPluginConfig = {
    fileName: 'asset-manifest.json'
 }
@@ -30,25 +21,7 @@ const ImageminPluginConfig = {
    }
 }
 
-const cssLoader = {
-   loader: 'css-loader',
-   query: {
-      importLoaders: 1,
-      localIdentName: 'purify_[local]_[hash:base64:5]',
-      minimize: true,
-      modules: true
-   }
-}
-
-const scssLoader = {
-   loader: 'sass-loader',
-   options: {
-      sourceMap: true,
-      sourceMapContents: false
-   }
-}
-
-module.exports = merge(common, {
+module.exports = merge.smart({
    mode: 'production',
    output: {
       path: path.resolve(__dirname, '../dist'),
@@ -56,8 +29,8 @@ module.exports = merge(common, {
    },
    module: {
       rules: [
-         { test: /\.global\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader, 'css-loader', postCssLoader, 'resolve-url-loader', scssLoader] },
-         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader, cssLoader, postCssLoader, 'resolve-url-loader', scssLoader] },
+         { test: /\.global\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader] },
+         { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: [MiniCssExtractPlugin.loader] },
       ],
    },
    plugins: [
@@ -71,4 +44,4 @@ module.exports = merge(common, {
          purifyOptions: { info: true, minify: true, whitelist: ['*purify*'] }
       }),
    ],
-});
+}, common);
