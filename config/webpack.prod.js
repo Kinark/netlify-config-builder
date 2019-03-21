@@ -1,12 +1,12 @@
 const path = require('path');
-const glob = require('glob')
+// const glob = require('glob')
 
 const MinifyJsPlugin = require('babel-minify-webpack-plugin')
 const ManifestPlugin = require('webpack-manifest-plugin');
 const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const PurifyCSSPlugin = require('purifycss-webpack');
+// const PurifyCSSPlugin = require('purifycss-webpack');
 
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
@@ -39,9 +39,9 @@ module.exports = merge.smart({
       new ImageminPlugin(ImageminPluginConfig),
       new ManifestPlugin(ManifestPluginConfig),
       new MiniCssExtractPlugin({ filename: 'static/css/[name].css', chunkFilename: '[id].css' }),
-      new PurifyCSSPlugin({
-         paths: glob.sync(path.join(__dirname, '../src/**/*.js')),
-         purifyOptions: { info: true, minify: true, whitelist: ['*purify*'] }
-      }),
+      // new PurifyCSSPlugin({
+      //    paths: glob.sync(path.join(__dirname, '../src/**/*.js')),
+      //    purifyOptions: { info: true, minify: true, whitelist: ['*purify*'] }
+      // }),
    ],
 }, common);
