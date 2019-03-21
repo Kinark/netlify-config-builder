@@ -9,6 +9,7 @@ It cointains:
    * Alias: "~" == "./src/"
    * Auto bundle injection (html-webpack-plugin)
 * CSS Modules
+* Styled-components
 * SASS Ready
 * [React](https://reactjs.org/)
 * [Axios](https://github.com/axios/axios)
@@ -28,6 +29,7 @@ It cointains:
    * Custom rules
    * Airbnb extended
    * Extra stuff (check .eslintrc.js)
+* Prettier
 * Hot Module Replacement + React Hot Loader
 * Cheap Module Source Map
 * Webpack proxy: /ajax redirects to port localhost:8070
@@ -38,7 +40,7 @@ It cointains:
 * CSS Extract Plugin
 * UglifyJS
 * Image Minifier
-* PurifyCSS (remove not used CSS (only global ones))
+* Disabled temporarily: PurifyCSS (remove not used CSS (only global ones))
 * MinifyCSS
 
 ### **NPM Scripts**
