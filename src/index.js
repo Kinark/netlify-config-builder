@@ -6,6 +6,7 @@ import './styles.global.scss'
 
 const root = document.getElementById('root')
 
+// render(<BrowserRouter><Route component={App} /></BrowserRouter>, root);
 render(<App />, root);
 
 if (module.hot) {
