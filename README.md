@@ -1,4 +1,4 @@
-A dead-simple react/sass boilerplate.
+A not so dead-simple react/sass boilerplate.
 
 It cointains:
 
