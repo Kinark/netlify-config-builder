@@ -1,5 +1,5 @@
 import React from 'react';
-import { hot } from 'react-hot-loader'
+import { hot } from 'react-hot-loader/root'
 import { Metas } from '~/components/Metas';
 import Favicon from '~/components/Favicon';
 
