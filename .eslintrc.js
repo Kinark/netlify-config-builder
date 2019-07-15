@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
    parser: 'babel-eslint',
@@ -6,7 +6,7 @@ module.exports = {
       sourceType: 'module',
       allowImportExportEverywhere: true
    },
-   'extends': 'airbnb',
+   extends: 'airbnb',
    env: {
       browser: true,
       node: true
@@ -16,13 +16,11 @@ module.exports = {
       'class-methods-use-this': [0, { exceptMethods: ['getDataFromRpc'] }],
       'max-len': 0,
       'object-curly-newline': 0,
-      'semi': 0,
+      semi: 0,
       'linebreak-style': 0,
       allowThen: 'true',
       indent: 'off',
-      'arrow-parens': [
-         'off'
-      ],
+      'arrow-parens': ['off'],
       'compat/compat': 'off',
       'consistent-return': 'off',
       'comma-dangle': 'off',
@@ -44,37 +42,32 @@ module.exports = {
       'react/sort-comp': [
          'error',
          {
-            order: [
-               'type-annotations',
-               'static-methods',
-               'lifecycle',
-               'everything-else',
-               'render'
-            ]
+            order: ['type-annotations', 'static-methods', 'lifecycle', 'everything-else', 'render']
          }
       ],
       'react/jsx-no-bind': 'off',
       'react/jsx-filename-extension': [
          'error',
          {
-            extensions: [
-               '.js',
-               '.jsx'
-            ]
+            extensions: ['.js', '.jsx']
          }
       ],
-      'react/prefer-stateless-function': 'off'
+      'react/prefer-stateless-function': 'off',
+      'jsx-a11y/label-has-associated-control': 'off',
+      'jsx-a11y/label-has-for': 'off',
+      'implicit-arrow-linebreak': 'off',
+      'react/no-multi-comp': 'off',
+      'prefer-destructuring': 'off',
+      'react/no-danger': 'off',
+      'react/destructuring-assignment': 'off',
+      'no-return-assign': 'off',
+      'no-confusing-arrow': 'off',
+      'operator-linebreak': 'off'
    },
-   plugins: [
-      'flowtype',
-      'import',
-      'promise',
-      'compat',
-      'react'
-   ],
+   plugins: ['flowtype', 'import', 'promise', 'compat', 'react'],
    settings: {
       'import/resolver': {
-         webpack: { config: path.resolve('./config/webpack.common.js'), },
+         webpack: { config: path.resolve('./config/webpack.common.js') }
       }
    }
 }
