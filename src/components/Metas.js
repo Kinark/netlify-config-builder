@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Helmet } from 'react-helmet';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Helmet } from 'react-helmet'
 
 export const Cover = ({ children: cover }) => (
    <Helmet>
@@ -10,7 +10,7 @@ export const Cover = ({ children: cover }) => (
 )
 
 Cover.propTypes = {
-   children: PropTypes.shape({}).isRequired,
+   children: PropTypes.shape({}).isRequired
 }
 
 export const Description = ({ children: desc }) => (
@@ -74,7 +74,7 @@ Metas.propTypes = {
    description: PropTypes.string,
    cover: PropTypes.string,
    url: PropTypes.string,
-   color: PropTypes.string,
+   color: PropTypes.string
 }
 
 Metas.defaultProps = {
@@ -82,5 +82,5 @@ Metas.defaultProps = {
    description: undefined,
    cover: undefined,
    url: undefined,
-   color: undefined,
+   color: undefined
 }
