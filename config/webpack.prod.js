@@ -7,6 +7,7 @@ const ImageminPlugin = require('imagemin-webpack-plugin').default;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 // const PurifyCSSPlugin = require('purifycss-webpack');
 
 const merge = require('webpack-merge');
@@ -45,5 +46,6 @@ module.exports = merge.smart({
       //    purifyOptions: { info: true, minify: true, whitelist: ['*purify*'] }
       // }),
       new CopyPlugin([{ from: './public/_redirects', to: './' }]),
+      new BundleAnalyzerPlugin({ analyzerMode: 'static', openAnalyzer: false })
    ],
 }, common);
