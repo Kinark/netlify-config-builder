@@ -8,14 +8,6 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
    inject: 'body'
 });
 
-const imgLoader = {
-   loader: 'url-loader',
-   options: {
-      limit: 8000,
-      name: 'static/media/[hash]-[name].[ext]'
-   }
-}
-
 const fontLoader = {
    loader: 'url-loader',
    options: {
@@ -60,7 +52,6 @@ module.exports = {
          { test: /\.global\.(css|scss|sass)$/, use: ['css-loader', postCssLoader, 'resolve-url-loader', scssLoader] },
          { test: /^((?!\.global).)*\.(css|scss|sass)$/, use: [cssLoader, postCssLoader, 'resolve-url-loader', scssLoader] },
          { test: /\.(js|jsx)$/, use: [{ loader: 'babel-loader', options: { cacheDirectory: true } }], exclude: /node_modules/ },
-         { test: /\.(png|jp(e*)g|svg|ico|gif)$/, use: [imgLoader] },
          { test: /\.(otf|ttf|eot|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, use: [fontLoader] },
       ],
    },
