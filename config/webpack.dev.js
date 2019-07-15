@@ -27,5 +27,10 @@ module.exports = merge.smart({
    },
    plugins: [
       new webpack.NamedModulesPlugin(),
-   ]
+   ],
+   resolve: {
+      alias: {
+        'react-dom': '@hot-loader/react-dom'
+      }
+  }
 }, common);

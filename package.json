@@ -69,6 +69,7 @@
       "webpack-merge": "^4.1.4"
    },
    "dependencies": {
+      "@hot-loader/react-dom": "^16.8.6",
       "axios": "^0.18.0",
       "prop-types": "^15.6.2",
       "react": "^16.8.6",
