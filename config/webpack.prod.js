@@ -17,12 +17,6 @@ const ManifestPluginConfig = {
    fileName: 'asset-manifest.json'
 }
 
-const ImageminPluginConfig = {
-   pngquant: {
-      quality: '95-100'
-   }
-}
-
 module.exports = merge.smart({
    mode: 'production',
    output: {
@@ -38,7 +32,7 @@ module.exports = merge.smart({
    plugins: [
       new MinifyJsPlugin(),
       new CleanWebpackPlugin(['dist/**/*'], { root: path.resolve(__dirname, '../') }),
-      new ImageminPlugin(ImageminPluginConfig),
+      new ImageminPlugin(),
       new ManifestPlugin(ManifestPluginConfig),
       new MiniCssExtractPlugin({ filename: 'static/css/[name].css', chunkFilename: '[id].css' }),
       // new PurifyCSSPlugin({
