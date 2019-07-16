@@ -4,8 +4,8 @@
    "description": "A dead-simple react/sass boilerplate.",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "webpack-dev-server --hot --host 0.0.0.0 --port 8080 --config ./config/webpack.dev.js",
-      "build": "webpack -p --config ./config/webpack.prod.js"
+      "start": "NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --port 8080 --config ./config/webpack.dev.js",
+      "build": "NODE_ENV=production webpack -p --config ./config/webpack.prod.js"
    },
    "repository": {
       "type": "git",
