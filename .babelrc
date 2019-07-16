@@ -9,14 +9,18 @@
       ],
       "@babel/preset-react"
    ],
-   "plugins": ["add-module-exports", "react-hot-loader/babel"],
+   "plugins": ["transform-class-properties", "add-module-exports", "react-hot-loader/babel"],
    "env": {
       "production": {
-         "presets": ["react-optimize"],
-         "plugins": ["dev-expression", ["babel-plugin-styled-components", { "displayName": false }]]
+         "plugins": [
+            "transform-react-remove-prop-types",
+            "@babel/transform-react-inline-elements",
+            "dev-expression",
+            ["babel-plugin-styled-components", { "displayName": false }]
+         ]
       },
       "development": {
-         "plugins": ["transform-class-properties", "babel-plugin-styled-components"]
+         "plugins": ["babel-plugin-styled-components"]
       }
    }
 }
