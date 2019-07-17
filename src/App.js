@@ -1,5 +1,5 @@
-import React from 'react';
 import { hot } from 'react-hot-loader/root'
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom'
 
 import { Metas } from '~/components/Metas';
