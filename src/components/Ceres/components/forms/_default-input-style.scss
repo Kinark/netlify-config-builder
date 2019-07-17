@@ -1,0 +1,52 @@
+%default-input-style {
+   // General Styles
+   box-shadow: none;
+   display: block;
+   flex-grow: 1;
+   min-width: 0;
+   color: #2e4369;
+   background-color: $input-background;
+   background-image: none;
+   border: $input-border;
+   line-height: $input-line-height;
+   transition: border-color ease-in-out .15s;
+   padding: $input-padding;
+   font-size: $input-font-size;
+   border-radius: $input-border-radius;
+   box-sizing: border-box;
+   order: 1;
+   appearance: none;
+   font: inherit;
+   
+   // Disabled input style
+   &:disabled, &[readonly="readonly"] {
+      color: $input-disabled-color;
+      border: $input-disabled-border;
+   }
+   
+   // Disabled label style
+   &:disabled, &[readonly="readonly"] {
+      &+label, &+.prefix, &+.prefix+label {color: $input-disabled-color;}
+   }
+   
+   // Hovered input style
+   &:hover:not([readonly]) {
+      border-color: $input-hover-color;
+   }
+   
+   // Hovered label/icon style
+   &:hover:not([readonly]) {
+      &+label, &+.prefix, &+.prefix+label {color: darken($input-hover-color, 30%);}
+   }
+   
+   // Focused input style
+   &:focus:not([readonly]) {
+      border-color: $input-focus-color;
+      outline: none;
+   }
+   
+   // Focused label style
+   &:focus:not([readonly]) {
+      &+label, &+.prefix, &+.prefix+label {color: $input-focus-color;}
+   }
+}

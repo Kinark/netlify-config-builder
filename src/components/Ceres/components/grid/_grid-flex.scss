@@ -1,0 +1,56 @@
+// Mixins to eliminate code repitition
+@mixin row-extra-flex-classes($size) {
+   &.#{$size}-start {justify-content: flex-start; text-align: start;}
+   &.#{$size}-center {justify-content: center; text-align: center;}
+   &.#{$size}-end {justify-content: flex-end; text-align: end;}
+   &.#{$size}-top {align-items: flex-start;}
+   &.#{$size}-middle {align-items: center;}
+   &.#{$size}-bottom {align-items: flex-end;}
+   &.#{$size}-around {justify-content: space-around;}
+   &.#{$size}-between {justify-content: space-between;}
+}
+@mixin col-extra-flex-classes($size) {
+   &.#{$size} {flex-grow: 1;flex-basis: 0;max-width: 100%;}
+   &.#{$size}-first {order: -1;}
+   &.#{$size}-last {order: 1;}
+   &.#{$size}-initial-order {order: initial;}
+}
+
+@mixin grid-constructor($size) {
+   $i: 1;
+   @while $i <= $num-cols {
+      $perc: unquote((100 / ($num-cols / $i)) + "%");
+      &.#{$size}#{$i} {
+         flex-basis: $perc;
+         max-width: $perc;
+      }
+      @if $i < 12 {
+         &.offset-#{$size}#{$i} {
+            margin-left: $perc;
+         }
+      }
+      $i: $i + 1;
+   }
+   @include col-extra-flex-classes($size);
+}
+
+@import "./_grid-common";
+
+.row {
+   @include common-row;
+   display: flex;
+   flex: 0 1 auto;
+   flex-direction: row;
+   flex-wrap: wrap;
+   .reverse {flex-direction: row-reverse;}
+   @include row-extra-flex-classes("xs");
+   @media #{$small-and-up} {@include row-extra-flex-classes("s");}
+   @media #{$medium-and-up} {@include row-extra-flex-classes("m");}
+   @media #{$large-and-up} {@include row-extra-flex-classes("l");}
+   @media #{$extra-large-and-up} {@include row-extra-flex-classes("xl");}
+   .col {
+      @include common-row-col;
+      flex: 0 0 auto;
+      .reverse {flex-direction: column-reverse;}
+   }
+}

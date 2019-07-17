@@ -1,0 +1,148 @@
+// 1. Colors
+// ==========================================================================
+$primary-color: color("light-blue", "accent-2") !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+$secondary-color: color("teal", "lighten-1") !default;
+$success-color: color("green", "base") !default;
+$error-color: color("red", "base") !default;
+$link-color: color("light-blue", "darken-1") !default;
+// 2. Media queries
+// ==========================================================================
+// Media Query Ranges (last value before change)
+// $extra-small-screen-max: 549px !default;
+// $small-screen-max: 612px !default;
+// $medium-screen-max: 792px !default;
+// $large-screen-max: 959px !default;
+$extra-small-screen-max: 575px !default;
+$small-screen-max: 767px !default;
+$medium-screen-max: 991px !default;
+$large-screen-max: 1665px !default;
+// extra-large-screen > large-screen
+// Beginning of each screan (min values of each one)
+$small-screen-min: $extra-small-screen-max+1 !default;
+$medium-screen-min: $small-screen-max+1 !default;
+$large-screen-min: $medium-screen-max+1 !default;
+$extra-large-screen-min: $large-screen-max+1 !default;
+$small-and-up: "only screen and (min-width : #{$small-screen-min})" !default;
+$medium-and-up: "only screen and (min-width : #{$medium-screen-min})" !default;
+$large-and-up: "only screen and (min-width : #{$large-screen-min})" !default;
+$extra-large-and-up: "only screen and (min-width : #{$extra-large-screen-min})" !default;
+$extra-small-and-down: "only screen and (max-width : #{$extra-small-screen-max})" !default;
+$small-and-down: "only screen and (max-width : #{$small-screen-max})" !default;
+$medium-and-down: "only screen and (max-width : #{$medium-screen-max})" !default;
+$large-and-down: "only screen and (max-width : #{$large-screen-max})" !default;
+$small-only: "only screen and (min-width : #{$small-screen-min}) and (max-width : #{$small-screen-max})" !default;
+$medium-only: "only screen and (min-width : #{$medium-screen-min}) and (max-width : #{$medium-screen-max})" !default;
+$large-only: "only screen and (min-width : #{$large-screen-min}) and (max-width : #{$large-screen-max})" !default;
+// 3. Tables
+// ==========================================================================
+$table-border-color: rgba(0, 0, 0, .12) !default;
+$table-striped-color: rgba(242, 242, 242, 0.5) !default;
+// 4. Typography
+// ==========================================================================
+$font-stack: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !default;
+$off-black: rgba(0, 0, 0, 0.87) !default;
+// Header Styles
+$h1-fontsize: 2.786rem !default;
+$h2-fontsize: 2.143rem !default;
+$h3-fontsize: 1.786rem !default;
+$h4-fontsize: 1.4rem !default;
+$h5-fontsize: 1.3rem !default;
+$h6-fontsize: 1.2rem !default;
+// 5. Flow Text
+// ==========================================================================
+$range: $large-screen-max - $small-screen-max !default;
+$intervals: 20 !default;
+$interval-size: $range / $intervals !default;
+// 6. Forms
+// ==========================================================================
+// Inputs + Textarea
+$input-border-radius: 3px !default;
+$input-border-color: color("blue-grey", "lighten-4") !default;
+$input-border: 1px solid $input-border-color !default;
+$input-background: #fff !default;
+$input-focus-color: $primary-color !default;
+$input-hover-color: color("blue-grey", "lighten-2") !default;
+$input-font-size: 15px !default;
+$input-padding: 12px !default;
+$input-line-height: 18px !default;
+$label-font-size: 1rem !default;
+$input-disabled-color: rgba(0, 0, 0, .42) !default;
+$input-disabled-solid-color: #949494 !default;
+$input-disabled-border: 1px dotted $input-disabled-color !default;
+$placeholder-text-color: lighten($input-border-color, 20%) !default;
+// Radio/Checkbox Buttons
+$checkers-border-color: color("blue-grey", "lighten-4") !default;
+$checkers-hover-color: color("blue-grey", "lighten-2") !default;
+$checkers-fill-color: $primary-color !default;
+$checkers-size: 16px !default;
+// Select
+$select-border: 1px solid #f2f2f2 !default;
+$select-background: rgba(255, 255, 255, 0.90) !default;
+$select-focus: 1px solid lighten($secondary-color, 47%) !default;
+$select-option-hover: rgba(0, 0, 0, .08) !default;
+$select-option-focus: rgba(0, 0, 0, .08) !default;
+$select-option-selected: rgba(0, 0, 0, .03) !default;
+$select-padding: 5px !default;
+$select-radius: 2px !default;
+$select-disabled-color: rgba(0, 0, 0, .3) !default;
+// 7. Grid
+// ==========================================================================
+$num-cols: 12 !default;
+$gutter-width: 1.5rem !default;
+$element-top-margin: $gutter-width/3 !default;
+$element-bottom-margin: ($gutter-width*2)/3 !default;
+// 8. Buttons
+// ==========================================================================
+// Shared styles
+$button-border: none !default;
+$button-background-focus: lighten($secondary-color, 4%) !default;
+$button-font-size: 1rem !default;
+$button-icon-font-size: 1.3rem !default;
+$button-height: 36px !default;
+$button-padding: 0 2rem !default;
+$button-radius: 2px !default;
+// Disabled styles
+$button-disabled-background: #DFDFDF !default;
+$button-disabled-color: #9F9F9F !default;
+// Raised buttons
+$button-raised-background: $secondary-color !default;
+$button-raised-background-hover: lighten($button-raised-background, 5%) !default;
+$button-raised-color: #fff !default;
+// Large buttons
+$button-large-icon-font-size: 1.6rem !default;
+$button-large-height: $button-height * 1.5 !default;
+// Flat buttons
+$button-flat-color: #343434 !default;
+$button-flat-disabled-color: lighten(#999, 10%) !default;
+// Floating buttons
+$button-floating-background: $secondary-color !default;
+$button-floating-background-hover: $button-floating-background !default;
+$button-floating-color: #fff !default;
+$button-floating-size: 40px !default;
+$button-floating-large-size: 56px !default;
+$button-floating-radius: 50% !default;
+// 9. Dropdown
+// ==========================================================================
+$dropdown-bg-color: #fff !default;
+$dropdown-hover-bg-color: #eee !default;
+$dropdown-color: $secondary-color !default;
+$dropdown-item-height: 50px !default;
+// 10. Navigation Bar
+// ==========================================================================
+$navbar-height: 64px !default;
+$navbar-line-height: $navbar-height !default;
+$navbar-height-mobile: 56px !default;
+$navbar-line-height-mobile: $navbar-height-mobile !default;
+$navbar-font-size: 1rem !default;
+$navbar-font-color: #fff !default;
+$navbar-brand-font-size: 2.1rem !default;
+// 11. Side Navigation
+// ==========================================================================
+$sidenav-font-size: 14px !default;
+$sidenav-font-color: rgba(0, 0, 0, .87) !default;
+$sidenav-bg-color: #fff !default;
+$sidenav-padding: 16px !default;
+$sidenav-item-height: 48px !default;
+$sidenav-line-height: $sidenav-item-height !default;

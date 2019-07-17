@@ -1,0 +1,48 @@
+/* Text Inputs + Textarea
+========================================================================== */
+
+/* Style Placeholders */
+
+::placeholder {
+   color: $placeholder-text-color;
+}
+
+/* Text inputs */
+input:not([type]),
+input[type=text]:not(.browser-default),
+input[type=password]:not(.browser-default),
+input[type=email]:not(.browser-default),
+input[type=url]:not(.browser-default),
+input[type=time]:not(.browser-default),
+input[type=date]:not(.browser-default),
+input[type=datetime]:not(.browser-default),
+input[type=datetime-local]:not(.browser-default),
+input[type=tel]:not(.browser-default),
+input[type=number]:not(.browser-default),
+input[type=search]:not(.browser-default),
+textarea.materialize-textarea {
+   @extend %default-input-style;
+}
+
+/* Textarea */
+
+// Default textarea
+textarea {
+   width: 100%;
+   // height: $input-height;
+   background-color: transparent;
+}
+
+// For textarea autoresize
+// .hiddendiv {
+//    visibility: hidden;
+//    white-space: pre-wrap;
+//    word-wrap: break-word;
+//    overflow-wrap: break-word; /* future version of deprecated 'word-wrap' */
+//    padding-top: 1.2rem; /* prevents text jump on Enter keypress */
+// 
+//    // Reduces repaints
+//    position: absolute;
+//    top: 0;
+//    z-index: -1;
+// }
