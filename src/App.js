@@ -1,18 +1,17 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root'
+import { BrowserRouter } from 'react-router-dom'
+
 import { Metas } from '~/components/Metas';
 import Favicon from '~/components/Favicon';
-
-const title = 'Sample Website';
-const description = 'A sample website.';
-// const cover = "";
+import AppRoutes from '~/components/AppRoutes';
 
 const App = () => (
-   <div>
-      <Metas title={title} description={description} />
+   <BrowserRouter>
+      <Metas title="Sample Website" description="" />
       <Favicon />
-      Hey
-   </div>
+      <AppRoutes />
+   </BrowserRouter>
 )
 
 export default hot(App)
