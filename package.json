@@ -5,7 +5,8 @@
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
       "start": "NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --port 8080 --config ./config/webpack.dev.js",
-      "build": "NODE_ENV=production webpack -p --config ./config/webpack.prod.js"
+      "build": "NODE_ENV=production webpack -p --config ./config/webpack.prod.js",
+      "postbuild": "babel-node ./config/sitemap-builder.js"
    },
    "repository": {
       "type": "git",
@@ -23,10 +24,13 @@
    "author": "Igor Marcossi",
    "license": "ISC",
    "devDependencies": {
+      "@babel/cli": "^7.5.0",
       "@babel/core": "^7.1.6",
+      "@babel/node": "^7.5.0",
       "@babel/plugin-transform-react-inline-elements": "^7.2.0",
       "@babel/preset-env": "^7.1.6",
       "@babel/preset-react": "^7.0.0",
+      "@babel/register": "^7.4.4",
       "@hot-loader/react-dom": "^16.8.6",
       "autoprefixer": "^9.4.7",
       "babel-eslint": "^10.0.1",
@@ -67,6 +71,7 @@
       "purify-css": "^1.2.5",
       "purifycss-webpack": "^0.7.0",
       "react-hot-loader": "^4.12.6",
+      "react-router-sitemap": "^1.2.0",
       "resolve-url-loader": "^3.0.1",
       "sass-loader": "^7.1.0",
       "style-loader": "^0.23.1",
