@@ -7,8 +7,10 @@ const root = document.getElementById('root')
 
 render(<App />, root)
 
-module.hot.accept('./App.js', () => {
-   // eslint-disable-next-line global-require
-   const NextApp = require('./App.js').default
-   render(<NextApp />, root)
-})
+if (module.hot) {
+   module.hot.accept('./App.js', () => {
+      // eslint-disable-next-line global-require
+      const NextApp = require('./App.js').default
+      render(<NextApp />, root)
+   })
+}
