@@ -3,14 +3,14 @@
    margin-left: auto;
    margin-right: auto;
    width: 95%;
-   max-width: 1280px;
+   max-width: 720px;
    padding-right: 8px;
    padding-left: 8px;
    
-   @media #{$small-and-up} {width: $small-screen-max * 0.7301173402868318;} // (560px)
-   @media #{$medium-and-up} {width: $medium-screen-max * 0.7588294651866801;} // (752px)
-   @media #{$large-and-up} {width: $large-screen-max * 0.8140116763969975;} // (976px)
-   @media #{$extra-large-and-up} {width: 1280px} // (1200px)
+   // @media #{$small-and-up} {width: $small-screen-max * 0.7301173402868318;} // (560px)
+   // @media #{$medium-and-up} {width: $medium-screen-max * 0.7588294651866801;} // (752px)
+   // @media #{$large-and-up} {width: $large-screen-max * 0.8140116763969975;} // (976px)
+   // @media #{$extra-large-and-up} {width: 1280px} // (1200px)
 }
 
 .container-fluid {
