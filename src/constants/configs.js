@@ -13,7 +13,20 @@ import textIcon from '~/images/widgets/paper.svg'
 import stringIcon from '~/images/widgets/pencil.svg'
 import objectIcon from '~/images/widgets/sitemap1.svg'
 
-export const commonOptions = {
+export const collectionFolderOptions = {
+   label: { type: 'string', defaultsTo: '' },
+   name: { type: 'string', defaultsTo: '' },
+   folder: { type: 'string', defaultsTo: '' },
+   create: { type: 'boolean', defaultsTo: true },
+   identifier_field: { type: 'string', defaultsTo: '' }
+}
+
+export const collectionFilesOptions = {
+   label: { type: 'string', defaultsTo: '' },
+   name: { type: 'string', defaultsTo: '' }
+}
+
+export const commonWidgetOptions = {
    label: { type: 'string', defaultsTo: '' },
    name: { type: 'string', defaultsTo: '' },
    required: { type: 'boolean', defaultsTo: true },
@@ -50,7 +63,7 @@ export default [
       icon: dateIcon,
       widget: 'datetime',
       options: {
-         default: { type: 'string', defaultsTo: () => Date.now() },
+         default: { type: 'string', defaultsTo: '' },
          format: { type: 'string', defaultsTo: '' },
          dateFormat: { type: 'string', defaultsTo: '' },
          timeFormat: { type: 'string', defaultsTo: '' }
