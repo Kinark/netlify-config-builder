@@ -76,7 +76,7 @@ export default [
    },
    {
       name: 'Hidden',
-      icon: ghostIcon,
+      icon: hiddenIcon,
       widget: 'hidden',
       options: {
          default: { type: 'string', defaultsTo: '' }
