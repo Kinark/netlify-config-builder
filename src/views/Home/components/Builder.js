@@ -113,7 +113,7 @@ const Builder = () => {
          </Modal>
          <div className="container">
             <div className="row">
-               <div className="col s5">
+               <Collections className="col s5">
                   <Title>Collections</Title>
                   <div className="section">
                      {config.collections.map((collection, i) => (
@@ -126,7 +126,7 @@ const Builder = () => {
                         </IconInfoWrapper>
                      ))}
                   </div>
-               </div>
+               </Collections>
                <div className="col s7">
                   {!selectedCollection ? (
                      <Card>
@@ -161,6 +161,10 @@ const Builder = () => {
 }
 
 export default Builder
+
+const Collections = styled.div`
+   position: sticky;
+`
 
 const Title = styled.h4`
    font-size: 18px;
