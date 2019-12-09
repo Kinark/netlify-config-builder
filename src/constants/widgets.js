@@ -14,10 +14,10 @@ import stringIcon from '~/images/widgets/pencil.svg'
 import objectIcon from '~/images/widgets/sitemap1.svg'
 
 export const commonOptions = {
-   label: 'string',
-   name: 'string',
-   required: 'boolean',
-   hint: 'string'
+   label: { type: 'string', defaultsTo: '' },
+   name: { type: 'string', defaultsTo: '' },
+   required: { type: 'boolean', defaultsTo: true },
+   hint: { type: 'string', defaultsTo: '' }
 }
 
 export default [
@@ -148,7 +148,7 @@ export default [
       icon: objectIcon,
       widget: 'object',
       options: {
-         fields: { type: 'widgets', required: true },
+         fields: { type: 'widgets', required: true }
       }
    },
    {
@@ -174,5 +174,5 @@ export default [
          options: { type: 'array', required: true },
          multiple: { type: 'boolean', defaultsTo: false }
       }
-   },
+   }
 ]
