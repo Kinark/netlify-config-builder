@@ -5,13 +5,7 @@ a {
 html {
    line-height: 1.5;
    @media only screen and (min-width: 0) {
-      font-size: 20px;
-   }
-   @media #{$medium-and-up} {
-      font-size: 24px;
-   }
-   @media #{$large-and-up} {
-      font-size: 28px;
+      font-size: 10px;
    }
    //   font-family: $font-stack;
    font-weight: 400;
