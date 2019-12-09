@@ -28,4 +28,5 @@ const ActualInput = styled.input`
    color: inherit;
    opacity: 1;
    font-family: inherit;
+   width: 100%;
 `
