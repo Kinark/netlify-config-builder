@@ -24,5 +24,6 @@ const GlobalStyle = createGlobalStyle`
     color: #1A213A;
     font-family: 'Lato', sans-serif;
     line-height: normal;
+    overflow-y: scroll;
   }
 `

@@ -17,6 +17,7 @@ const Label = styled.label`
       opacity: 0.5;
       color: inherit;
       font-family: inherit;
+      margin-bottom: 10px;
    }
 `
 

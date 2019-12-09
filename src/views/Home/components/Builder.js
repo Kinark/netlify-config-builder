@@ -1,6 +1,10 @@
-import React, { useState } from 'react'
+/* eslint-disable no-nested-ternary */
+import React, { useState, useRef } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
+import objectPath from 'object-path'
+import AnimateHeight from 'react-animate-height'
+import { Transition, TransitionGroup } from 'react-transition-group'
 
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
@@ -35,28 +39,36 @@ const Builder = () => {
    const [selectedField, setSelectedField] = useState({})
    const [modalIsOpen, setIsModalOpen] = React.useState(false)
    const [inputs, setInputs] = useState({})
+   const fieldsList = useRef(null)
 
    const selectedCollection = selectedCollectionIndex === null ? false : config.collections[selectedCollectionIndex]
 
-   const modifyField = (field, widget, i, fileIndex) => {
+   const modifyField = (field, widget, fieldPath) => {
       const initialValues = {}
-      Object.entries(commonOptions).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo))
-      Object.entries(widget.options).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo))
+      Object.entries(commonOptions).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
+      Object.entries(widget.options).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
       setInputs({ ...initialValues, ...field })
-      setSelectedField({ field, widget, i, fileIndex })
+      setSelectedField({ field, widget, fieldPath })
       setIsModalOpen(true)
    }
 
-   const fieldLister = (field, i, fileIndex) => {
+   const fieldLister = (field, fieldPath, childTimes = 1) => {
       const rightWidget = widgets.find(widget => widget.widget === field.widget)
       return (
-         <IconInfoWrapper key={field.name} onClick={() => modifyField(field, rightWidget, i, fileIndex)}>
-            <img src={rightWidget.icon} alt="" />
-            <div>
-               <FieldTitle>{field.label}</FieldTitle>
-               <FieldSubtitle>{rightWidget.name}</FieldSubtitle>
-            </div>
-         </IconInfoWrapper>
+         <React.Fragment key={field.name}>
+            <IconInfoWrapper onClick={() => modifyField(field, rightWidget, fieldPath)}>
+               <img src={rightWidget.icon} alt="" />
+               <div>
+                  <FieldTitle>{field.label}</FieldTitle>
+                  <FieldSubtitle>{rightWidget.name}</FieldSubtitle>
+               </div>
+            </IconInfoWrapper>
+            {!!field.fields && (
+               <Child level={childTimes}>
+                  {field.fields.map((childField, childFieldIndex) => fieldLister(childField, [...fieldPath, 'fields', childFieldIndex], childTimes + 1))}
+               </Child>
+            )}
+         </React.Fragment>
       )
    }
 
@@ -66,11 +78,8 @@ const Builder = () => {
       e.preventDefault()
       const newField = { ...selectedField.field, ...inputs }
       const newConfig = { ...config }
-      if (typeof selectedField.fileIndex !== 'number') {
-         newConfig.collections[selectedCollectionIndex].fields[selectedField.i] = newField
-      } else {
-         newConfig.collections[selectedCollectionIndex].files[selectedField.fileIndex].fields[selectedField.i] = newField
-      }
+      const prefixedPath = ['collections', selectedCollectionIndex, ...selectedField.fieldPath]
+      objectPath.set(newConfig, prefixedPath, newField)
       setConfig(newConfig)
       setIsModalOpen(false)
    }
@@ -113,45 +122,58 @@ const Builder = () => {
          </Modal>
          <div className="container">
             <div className="row">
-               <Collections className="col s5">
-                  <Title>Collections</Title>
-                  <div className="section">
-                     {config.collections.map((collection, i) => (
-                        <IconInfoWrapper key={collection.label} active={i === selectedCollectionIndex} onClick={() => setSelectedCollectionIndex(i)}>
-                           <img src={collection.folder ? folderCollectionIcon : filesCollectionIcon} alt="" />
-                           <div>
-                              <FieldTitle>{collection.label}</FieldTitle>
-                              <FieldSubtitle>{collection.folder ? 'Folder' : 'Files'}</FieldSubtitle>
-                           </div>
-                        </IconInfoWrapper>
-                     ))}
-                  </div>
-               </Collections>
+               <div className="col s5">
+                  <Collections>
+                     <Title>Collections</Title>
+                     <div className="section">
+                        {config.collections.map((collection, i) => (
+                           <IconInfoWrapper key={collection.label} active={i === selectedCollectionIndex} onClick={() => setSelectedCollectionIndex(i)}>
+                              <img src={collection.folder ? folderCollectionIcon : filesCollectionIcon} alt="" />
+                              <div>
+                                 <FieldTitle>{collection.label}</FieldTitle>
+                                 <FieldSubtitle>{collection.folder ? 'Folder' : 'Files'}</FieldSubtitle>
+                              </div>
+                           </IconInfoWrapper>
+                        ))}
+                     </div>
+                  </Collections>
+               </div>
                <div className="col s7">
                   {!selectedCollection ? (
                      <Card>
                         <Title>Nothing selected yet</Title>
                      </Card>
                   ) : (
-                     <React.Fragment>
+                     <div ref={fieldsList}>
                         <Card>
                            <Title>General</Title>
                         </Card>
                         <Card>
                            <Title>Fields</Title>
-                           {selectedCollection.fields
-                              ? selectedCollection.fields.map(fieldLister)
-                              : selectedCollection.files.map((file, fileIndex) => (
-                                   <div className="section" key={file.name}>
-                                      <div>
-                                         <FieldTitle>{file.label}</FieldTitle>
-                                         <FieldSubtitle>{file.name}</FieldSubtitle>
-                                      </div>
-                                      {file.fields.map((field, i) => fieldLister(field, i, fileIndex))}
-                                   </div>
-                                ))}
+                           <TransitionGroup>
+                              <Transition key={selectedCollectionIndex} timeout={500}>
+                                 {state => (
+                                    <AnimateHeight
+                                       duration={state === 'exiting' || state === 'exited' || state !== 'entering' ? 500 : 0}
+                                       height={state === 'entered' ? 'auto' : 0}
+                                    >
+                                       {selectedCollection.fields
+                                          ? selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))
+                                          : selectedCollection.files.map((file, fileIndex) => (
+                                               <div className="section" key={file.name}>
+                                                  <div>
+                                                     <FieldTitle>{file.label}</FieldTitle>
+                                                     <FieldSubtitle>{file.name}</FieldSubtitle>
+                                                  </div>
+                                                  {file.fields.map((field, fieldIndex) => fieldLister(field, ['files', fileIndex, 'fields', fieldIndex]))}
+                                               </div>
+                                            ))}
+                                    </AnimateHeight>
+                                 )}
+                              </Transition>
+                           </TransitionGroup>
                         </Card>
-                     </React.Fragment>
+                     </div>
                   )}
                </div>
             </div>
@@ -164,6 +186,7 @@ export default Builder
 
 const Collections = styled.div`
    position: sticky;
+   top: 15px;
 `
 
 const Title = styled.h4`
@@ -202,4 +225,10 @@ const Card = styled.div`
    border-radius: 15px;
    padding: 20px;
    margin-bottom: 10px;
+`
+
+const Child = styled.div`
+   margin-left: ${({ level }) => `${level * 25}px`};
+   padding-left: 10px;
+   border-left: solid 1px #dedede;
 `
