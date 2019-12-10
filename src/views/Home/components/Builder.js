@@ -10,6 +10,7 @@ import AnimateHeight from 'react-animate-height'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import copy from 'copy-to-clipboard'
 import YAML from 'yaml'
+import randomWords from 'random-words'
 
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
@@ -258,9 +259,10 @@ const Builder = () => {
    }
 
    const addWidget = widget => {
+      const random = randomWords()
       const newWidgetObject = {
-         label: `New ${widget.name}`,
-         name: `new_${widget.widget}`,
+         label: random.replace(/^\w/, c => c.toUpperCase()),
+         name: random,
          required: true,
          widget: widget.widget,
          hint: ''
@@ -274,10 +276,11 @@ const Builder = () => {
 
    // ADD NEW STUFF METHODS
    const addFile = () => {
+      const random = randomWords()
       const newFileObject = {
-         file: 'src/pages/newFile.md',
-         label: 'New File',
-         name: 'newFile',
+         file: `src/pages/${random}.md`,
+         label: random.replace(/^\w/, c => c.toUpperCase()),
+         name: random,
          fields: [
             {
                label: 'Title',
@@ -294,10 +297,11 @@ const Builder = () => {
    }
 
    const addFolderCollection = () => {
+      const random = randomWords()
       const newFileObject = {
-         name: 'newFolderCollection',
-         label: 'New Folder Collection',
-         folder: 'src/pages/newFolderCollection',
+         name: random,
+         label: random.replace(/^\w/, c => c.toUpperCase()),
+         folder: `src/pages/${random}`,
          create: true,
          slug: '{{slug}}',
          fields: [
@@ -316,9 +320,10 @@ const Builder = () => {
    }
 
    const addFilesCollection = () => {
+      const random = randomWords()
       const newFileObject = {
-         name: 'newFolderCollection',
-         label: 'New Folder Collection',
+         name: random,
+         label: random.replace(/^\w/, c => c.toUpperCase()),
          delete: false,
          files: [
             {
