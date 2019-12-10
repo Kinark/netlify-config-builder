@@ -25,5 +25,6 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lato', sans-serif;
     line-height: normal;
     overflow-y: scroll;
+    font-size: 1.4rem;
   }
 `
