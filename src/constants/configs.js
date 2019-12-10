@@ -151,8 +151,8 @@ export default [
       options: {
          default: { type: 'number', defaultsTo: 0 },
          valueType: { type: 'select', options: ['int', 'float'], defaultsTo: 7 },
-         min: { type: 'number', defaultsTo: undefined },
-         max: { type: 'number', defaultsTo: undefined },
+         min: { type: 'number', defaultsTo: '' },
+         max: { type: 'number', defaultsTo: '' },
          step: { type: 'number', defaultsTo: 1 }
       }
    },
