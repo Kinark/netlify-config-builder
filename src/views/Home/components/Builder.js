@@ -70,7 +70,7 @@ const Builder = () => {
       }, 1000)
    }
 
-   // SELECTERS
+   // SELECTORS
    const selectCollection = i => {
       setSelectedCollectionIndex(i)
       const collection = config.collections[i]
