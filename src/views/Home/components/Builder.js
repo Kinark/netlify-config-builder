@@ -19,6 +19,7 @@ import modalStyles from '~/constants/modalStyles'
 import widgets from '~/constants/widgets'
 import { templates, fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
 import Input from '~/components/Input'
+import Textarea from '~/components/Textarea'
 import Toggle from '~/components/Toggle'
 import Button from '~/components/Button'
 import Select from '~/components/Select'
@@ -271,9 +272,7 @@ const Builder = () => {
    return (
       <React.Fragment>
          <Modal isOpen={isImportModalOpen} onRequestClose={() => setImportModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
-            <textarea value={importInput} onChange={e => setImportInput(e.target.value)} id="" cols="60" rows="10">
-               Paste your YML here
-            </textarea>
+            <Textarea value={importInput} onChange={e => setImportInput(e.target.value)} placeholder="Paste your YML here" />
             <div className="right-align">
                <Button onClick={importYaml}>Import YML</Button>
             </div>
