@@ -140,7 +140,7 @@ export default [
                'bulleted-list',
                'numbered-list'
             ],
-            defaultsTo: 'Point'
+            defaultsTo: []
          }
       }
    },
