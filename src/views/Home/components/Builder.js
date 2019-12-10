@@ -509,6 +509,9 @@ const Builder = () => {
                </div>
             </div>
          </div>
+         <div className="center">
+         Made with <Heart>&#9829;</Heart> by <a targer="_blank" href="https://marcossi.com/en">Marcossi Design</a>
+         </div>
       </React.Fragment>
    )
 }
@@ -526,6 +529,10 @@ const pulse = keyframes`
       box-shadow: 0 0 0 0 rgba(106, 119, 162, 0);
   }
 `
+
+const Heart = styled.span`
+   color: #e25555;
+`;
 
 const Collections = styled.div`
    position: sticky;
