@@ -86,6 +86,7 @@
    "dependencies": {
       "axios": "^0.18.0",
       "copy-to-clipboard": "^3.2.0",
+      "imagemin-webpack-plugin": "^2.4.2",
       "object-path-immutable": "^4.0.2",
       "prop-types": "^15.6.2",
       "random-words": "^1.1.0",
