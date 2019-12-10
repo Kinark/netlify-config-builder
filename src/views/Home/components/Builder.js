@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable function-paren-newline */
 /* eslint-disable no-nested-ternary */
 import React, { useState, useRef } from 'react'
@@ -6,9 +8,12 @@ import Modal from 'react-modal'
 import * as objectPath from 'object-path-immutable'
 import AnimateHeight from 'react-animate-height'
 import { Transition, TransitionGroup } from 'react-transition-group'
+import copy from 'copy-to-clipboard'
+import YAML from 'json-to-pretty-yaml'
 
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
+import deleteIcon from '~/images/widgets/cross.svg'
 import widgets, { fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
 import Input from '~/components/Input'
 import Toggle from '~/components/Toggle'
@@ -66,6 +71,7 @@ const Builder = () => {
 
    const selectedCollection = selectedCollectionIndex === null ? false : config.collections[selectedCollectionIndex]
 
+   // FX TRIGGERS
    const triggerSaveFxGeneral = () => {
       setSaveGeneral(true)
       setTimeout(() => {
@@ -79,6 +85,7 @@ const Builder = () => {
       }, 1000)
    }
 
+   // SELECTERS
    const selectField = (field, widget, fieldPath) => {
       const initialValues = {}
       Object.entries(commonWidgetOptions).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
@@ -105,6 +112,7 @@ const Builder = () => {
       setFileModalOpen(true)
    }
 
+   // LISTERS
    const fieldLister = (field, fieldPath) => {
       const rightWidget = widgets.find(widget => widget.widget === field.widget)
       return (
@@ -115,6 +123,9 @@ const Builder = () => {
                   <FieldTitle>{field.label}</FieldTitle>
                   <FieldSubtitle>{rightWidget.name}</FieldSubtitle>
                </div>
+               <DeleteBtn onClick={e => deleteItem(e, ['collections', selectedCollectionIndex, ...fieldPath])}>
+                  <img src={deleteIcon} alt="" />
+               </DeleteBtn>
             </IconInfoWrapper>
             {(field.widget === 'list' || field.widget === 'object') && (
                <Child>
@@ -210,6 +221,7 @@ const Builder = () => {
       }
    }
 
+   // ON SUBMIT HANDLERS
    const onModifyField = e => {
       e.preventDefault()
       const newField = { ...selectedField.field, ...inputs }
@@ -221,7 +233,10 @@ const Builder = () => {
 
    const onModifyCollection = e => {
       e.preventDefault()
-      const newCollection = { ...selectedCollection, ...collectionInputs }
+      const newCollectionInputs = { ...collectionInputs }
+      delete newCollectionInputs.fields
+      delete newCollectionInputs.files
+      const newCollection = { ...selectedCollection, ...newCollectionInputs }
       const prefixedPath = ['collections', selectedCollectionIndex]
       setConfig(objectPath.set(config, prefixedPath, newCollection))
       triggerSaveFxGeneral()
@@ -236,6 +251,7 @@ const Builder = () => {
       triggerSaveFxFields()
    }
 
+   // NEW WIDGET MODAL METHODS
    const newWidget = path => {
       setNewWidgetPath(['collections', selectedCollectionIndex, ...path])
       setAddWidgetModalOpen(true)
@@ -256,11 +272,12 @@ const Builder = () => {
       triggerSaveFxFields()
    }
 
+   // ADD NEW STUFF METHODS
    const addFile = () => {
       const newFileObject = {
          file: 'src/pages/newFile.md',
          label: 'New File',
-         name: 'index',
+         name: 'newFile',
          fields: [
             {
                label: 'Title',
@@ -274,6 +291,61 @@ const Builder = () => {
       }
       const newConfig = objectPath.push(config, ['collections', selectedCollectionIndex, 'files'], newFileObject)
       setConfig(newConfig)
+   }
+
+   const addFolderCollection = () => {
+      const newFileObject = {
+         name: 'newFolderCollection',
+         label: 'New Folder Collection',
+         folder: 'src/pages/newFolderCollection',
+         create: true,
+         slug: '{{slug}}',
+         fields: [
+            {
+               label: 'Title',
+               name: 'title',
+               widget: 'string',
+               default: '',
+               required: true,
+               hint: ''
+            }
+         ]
+      }
+      const newConfig = objectPath.push(config, ['collections'], newFileObject)
+      setConfig(newConfig)
+   }
+
+   const addFilesCollection = () => {
+      const newFileObject = {
+         name: 'newFolderCollection',
+         label: 'New Folder Collection',
+         delete: false,
+         files: [
+            {
+               file: 'src/pages/newFile.md',
+               label: 'New File',
+               name: 'index',
+               fields: [
+                  {
+                     label: 'Title',
+                     name: 'title',
+                     widget: 'string',
+                     default: '',
+                     required: true,
+                     hint: ''
+                  }
+               ]
+            }
+         ]
+      }
+      const newConfig = objectPath.push(config, ['collections'], newFileObject)
+      setConfig(newConfig)
+   }
+
+   // DELETE STUFF METHODS
+   const deleteItem = (e, path) => {
+      e.stopPropagation()
+      setConfig(objectPath.del(config, path))
    }
 
    return (
@@ -330,6 +402,11 @@ const Builder = () => {
          </Modal>
          <div className="container">
             <div className="row">
+               <div className="col xs12">
+                  <div className="right-align">
+                     <Button onClick={() => copy(YAML.stringify(config))}>Copy YML to clipboard</Button>
+                  </div>
+               </div>
                <div className="col s5">
                   <Collections>
                      <Title>Collections</Title>
@@ -341,9 +418,14 @@ const Builder = () => {
                                  <FieldTitle>{collection.label}</FieldTitle>
                                  <FieldSubtitle>{collection.folder ? 'Folder' : 'Files'}</FieldSubtitle>
                               </div>
+                              <DeleteBtn onClick={e => deleteItem(e, ['collections', i])}>
+                                 <img src={deleteIcon} alt="" />
+                              </DeleteBtn>
                            </IconInfoWrapper>
                         ))}
                      </div>
+                     <Button onClick={addFolderCollection}>Add folder collection</Button>
+                     <Button onClick={addFilesCollection}>Add files collection</Button>
                   </Collections>
                </div>
                <div className="col s7">
@@ -401,6 +483,9 @@ const Builder = () => {
                                                             <FieldTitle>{file.label}</FieldTitle>
                                                             <FieldSubtitle>{file.name}</FieldSubtitle>
                                                          </div>
+                                                         <DeleteBtn onClick={e => deleteItem(e, ['collections', selectedCollectionIndex, 'files', fileIndex])}>
+                                                            <img src={deleteIcon} alt="" />
+                                                         </DeleteBtn>
                                                       </IconInfoWrapper>
                                                       {file.fields.map((field, fieldIndex) => fieldLister(field, ['files', fileIndex, 'fields', fieldIndex]))}
                                                    </div>
@@ -467,6 +552,28 @@ const IconInfoWrapper = styled.div`
    }
    &:hover {
       background-color: ${({ nonHoverable }) => (nonHoverable ? 'none' : 'rgba(0, 0, 0, 0.1)')};
+   }
+   position: relative;
+`
+
+const DeleteBtn = styled.button`
+   position: absolute;
+   top: 0;
+   bottom: 0;
+   right: 10px;
+   margin: auto;
+   border-radius: 50%;
+   background-color: rgba(0, 0, 0, 0);
+   transition: 300ms background-color ease-out;
+   height: 40px;
+   width: 40px;
+   display: flex;
+   justify-content: center;
+   &:hover {
+      background-color: ${({ nonHoverable }) => (nonHoverable ? 'none' : 'rgba(0, 0, 0, 0.1)')};
+   }
+   img {
+      margin: 0;
    }
 `
 
