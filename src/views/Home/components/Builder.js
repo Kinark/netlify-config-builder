@@ -1,7 +1,7 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable no-nested-ternary */
 import React, { useState, useRef } from 'react'
-import styled from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import Modal from 'react-modal'
 import * as objectPath from 'object-path-immutable'
 import AnimateHeight from 'react-animate-height'
@@ -9,7 +9,7 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
-import widgets, { commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
+import widgets, { fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
 import Input from '~/components/Input'
 import Toggle from '~/components/Toggle'
 import Button from '~/components/Button'
@@ -39,16 +39,45 @@ Modal.setAppElement('#root')
 
 const Builder = () => {
    const [config, setConfig] = useState(defaultConfig)
+
+   // SELECTED THINGS
    const [selectedCollectionIndex, setSelectedCollectionIndex] = useState(null)
+   const [selectedFile, setSelectedFile] = useState({})
    const [selectedField, setSelectedField] = useState({})
+
+   // MODALS
    const [isInputOptionsModalOpen, setInputOptionsModalOpen] = React.useState(false)
    const [isAddWidgetModalOpen, setAddWidgetModalOpen] = React.useState(false)
+   const [isFileModalOpen, setFileModalOpen] = React.useState(false)
+
+   // PATHS
    const [newWidgetPath, setNewWidgetPath] = React.useState('')
+
+   // SAVE EFFECTS
+   const [saveGeneral, setSaveGeneral] = React.useState(false)
+   const [saveFields, setSaveFields] = React.useState(false)
+
+   // INPUTS
    const [inputs, setInputs] = useState({})
    const [collectionInputs, setCollectionInputs] = useState({})
+
+   // REFS
    const fieldsList = useRef(null)
 
    const selectedCollection = selectedCollectionIndex === null ? false : config.collections[selectedCollectionIndex]
+
+   const triggerSaveFxGeneral = () => {
+      setSaveGeneral(true)
+      setTimeout(() => {
+         setSaveGeneral(false)
+      }, 1000)
+   }
+   const triggerSaveFxFields = () => {
+      setSaveFields(true)
+      setTimeout(() => {
+         setSaveFields(false)
+      }, 1000)
+   }
 
    const selectField = (field, widget, fieldPath) => {
       const initialValues = {}
@@ -68,6 +97,14 @@ const Builder = () => {
       setCollectionInputs({ ...initialValues, ...collection })
    }
 
+   const selectFile = (file, filePath) => {
+      const initialValues = {}
+      Object.entries(fileOptions).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
+      setInputs({ ...initialValues, ...file })
+      setSelectedFile({ file, filePath })
+      setFileModalOpen(true)
+   }
+
    const fieldLister = (field, fieldPath) => {
       const rightWidget = widgets.find(widget => widget.widget === field.widget)
       return (
@@ -79,7 +116,7 @@ const Builder = () => {
                   <FieldSubtitle>{rightWidget.name}</FieldSubtitle>
                </div>
             </IconInfoWrapper>
-            {field.widget === 'list' && (
+            {(field.widget === 'list' || field.widget === 'object') && (
                <Child>
                   {!!field.fields && field.fields.map((childField, childFieldIndex) => fieldLister(childField, [...fieldPath, 'fields', childFieldIndex]))}
                   <Button onClick={() => newWidget([...fieldPath, 'fields'])}>Add new widget</Button>
@@ -90,11 +127,12 @@ const Builder = () => {
    }
 
    const inputLister = ([optionName, optionSettings], values, setter) => {
+      const setFunction = e => setter({ ...values, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value })
       switch (optionSettings.type) {
          case 'string':
             return (
                <div key={optionName} className="col xs12 l4">
-                  <Input name={optionName} value={values[optionName]} onChange={setter} type="text">
+                  <Input name={optionName} value={values[optionName]} onChange={setFunction} type="text">
                      {optionName}
                   </Input>
                </div>
@@ -102,7 +140,7 @@ const Builder = () => {
          case 'number':
             return (
                <div key={optionName} className="col xs12 l4">
-                  <Input name={optionName} value={values[optionName]} onChange={setter} type="number">
+                  <Input name={optionName} value={values[optionName]} onChange={setFunction} type="number">
                      {optionName}
                   </Input>
                </div>
@@ -110,7 +148,7 @@ const Builder = () => {
          case 'boolean':
             return (
                <div key={optionName} className="col xs12 l4">
-                  <Toggle name={optionName} checked={values[optionName]} onChange={setter}>
+                  <Toggle name={optionName} checked={values[optionName]} onChange={setFunction}>
                      {optionName}
                   </Toggle>
                </div>
@@ -118,7 +156,7 @@ const Builder = () => {
          case 'select':
             return (
                <div key={optionName} className="col xs12 l4">
-                  <Select name={optionName} id={optionName} value={values[optionName]} onChange={setter}>
+                  <Select name={optionName} id={optionName} value={values[optionName]} onChange={setFunction}>
                      <option disabled value={optionName}>
                         {optionName}
                      </option>
@@ -130,14 +168,47 @@ const Builder = () => {
                   </Select>
                </div>
             )
+         case 'checkboxes':
+            return (
+               <div key={optionName} className="col xs12">
+                  <FieldSubtitle>Available formatting buttons:</FieldSubtitle>
+                  {optionSettings.options.map(option => (
+                     <Toggle
+                        name={`${optionName}[${option}]`}
+                        key={option}
+                        checked={values[optionName].includes(option)}
+                        onChange={() =>
+                           setter({
+                              ...values,
+                              [optionName]: values[optionName].includes(option)
+                                 ? values[optionName].filter(crtOpt => crtOpt !== option)
+                                 : [...values[optionName], option]
+                           })
+                        }
+                     >
+                        {option}
+                     </Toggle>
+                  ))}
+               </div>
+            )
+         case 'array':
+            return (
+               <div key={optionName} className="col xs12 l4">
+                  <Input
+                     required
+                     name={optionName}
+                     value={values[optionName]}
+                     onChange={e => setter({ ...values, [e.target.name]: e.target.value.split(',') })}
+                     type="text"
+                  >
+                     {optionName}
+                  </Input>
+               </div>
+            )
          default:
             return null
       }
    }
-
-   const setInputValue = e => setInputs({ ...inputs, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value })
-   const setCollectionInputValue = e =>
-      setCollectionInputs({ ...collectionInputs, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value })
 
    const onModifyField = e => {
       e.preventDefault()
@@ -145,6 +216,7 @@ const Builder = () => {
       const prefixedPath = ['collections', selectedCollectionIndex, ...selectedField.fieldPath]
       setConfig(objectPath.set(config, prefixedPath, newField))
       setInputOptionsModalOpen(false)
+      triggerSaveFxFields()
    }
 
    const onModifyCollection = e => {
@@ -152,6 +224,16 @@ const Builder = () => {
       const newCollection = { ...selectedCollection, ...collectionInputs }
       const prefixedPath = ['collections', selectedCollectionIndex]
       setConfig(objectPath.set(config, prefixedPath, newCollection))
+      triggerSaveFxGeneral()
+   }
+
+   const onModifyFile = e => {
+      e.preventDefault()
+      const newFile = { ...selectedFile.file, ...inputs }
+      const prefixedPath = ['collections', selectedCollectionIndex, ...selectedFile.filePath]
+      setConfig(objectPath.set(config, prefixedPath, newFile))
+      setFileModalOpen(false)
+      triggerSaveFxFields()
    }
 
    const newWidget = path => {
@@ -171,33 +253,70 @@ const Builder = () => {
       const newConfig = objectPath.push(config, newWidgetPath, newWidgetObject)
       setConfig(newConfig)
       setAddWidgetModalOpen(false)
+      triggerSaveFxFields()
+   }
+
+   const addFile = () => {
+      const newFileObject = {
+         file: 'src/pages/newFile.md',
+         label: 'New File',
+         name: 'index',
+         fields: [
+            {
+               label: 'Title',
+               name: 'title',
+               widget: 'string',
+               default: '',
+               required: true,
+               hint: ''
+            }
+         ]
+      }
+      const newConfig = objectPath.push(config, ['collections', selectedCollectionIndex, 'files'], newFileObject)
+      setConfig(newConfig)
    }
 
    return (
       <React.Fragment>
+         <Modal isOpen={isFileModalOpen} onRequestClose={() => setFileModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
+            {!!selectedFile.file && (
+               <IconInfoWrapper nonHoverable>
+                  <div>
+                     <div className="row">
+                        <div className="col xs12">
+                           <FieldTitle big>{inputs.label}</FieldTitle>
+                           <FieldSubtitle big>{selectedFile.file.name}</FieldSubtitle>
+                        </div>
+                     </div>
+                     <form className="row no-mrg" onSubmit={onModifyFile}>
+                        {Object.entries({ ...fileOptions }).map(fileOption => inputLister(fileOption, inputs, setInputs))}
+                        <div className="col xs12 right-align">
+                           <Button type="submit">Save</Button>
+                        </div>
+                     </form>
+                  </div>
+               </IconInfoWrapper>
+            )}
+         </Modal>
          <Modal isOpen={isInputOptionsModalOpen} onRequestClose={() => setInputOptionsModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
             {!!selectedField.widget && (
-               <React.Fragment>
-                  <IconInfoWrapper nonHoverable>
-                     <img src={selectedField.widget.icon} alt="" />
-                     <div>
-                        <div className="row">
-                           <div className="col xs12">
-                              <FieldTitle big>{inputs.label}</FieldTitle>
-                              <FieldSubtitle big>{selectedField.widget.widget}</FieldSubtitle>
-                           </div>
+               <IconInfoWrapper nonHoverable>
+                  <img src={selectedField.widget.icon} alt="" />
+                  <div>
+                     <div className="row">
+                        <div className="col xs12">
+                           <FieldTitle big>{inputs.label}</FieldTitle>
+                           <FieldSubtitle big>{selectedField.widget.widget}</FieldSubtitle>
                         </div>
-                        <form className="row no-mrg" onSubmit={onModifyField}>
-                           {Object.entries({ ...commonWidgetOptions, ...selectedField.widget.options }).map(option =>
-                              inputLister(option, inputs, setInputValue)
-                           )}
-                           <div className="col xs12 right-align">
-                              <Button type="submit">Save</Button>
-                           </div>
-                        </form>
                      </div>
-                  </IconInfoWrapper>
-               </React.Fragment>
+                     <form className="row no-mrg" onSubmit={onModifyField}>
+                        {Object.entries({ ...commonWidgetOptions, ...selectedField.widget.options }).map(option => inputLister(option, inputs, setInputs))}
+                        <div className="col xs12 right-align">
+                           <Button type="submit">Save</Button>
+                        </div>
+                     </form>
+                  </div>
+               </IconInfoWrapper>
             )}
          </Modal>
          <Modal isOpen={isAddWidgetModalOpen} onRequestClose={() => setAddWidgetModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
@@ -234,7 +353,7 @@ const Builder = () => {
                      </Card>
                   ) : (
                      <div ref={fieldsList}>
-                        <Card>
+                        <Card save={saveGeneral}>
                            <Title>General</Title>
                            <TransitionGroup>
                               <Transition key={selectedCollectionIndex} timeout={500}>
@@ -245,12 +364,8 @@ const Builder = () => {
                                     >
                                        <form className="row" onSubmit={onModifyCollection}>
                                           {selectedCollection.fields
-                                             ? Object.entries(collectionFolderOptions).map(option =>
-                                                  inputLister(option, collectionInputs, setCollectionInputValue)
-                                               )
-                                             : Object.entries(collectionFilesOptions).map(option =>
-                                                  inputLister(option, collectionInputs, setCollectionInputValue)
-                                               )}
+                                             ? Object.entries(collectionFolderOptions).map(option => inputLister(option, collectionInputs, setCollectionInputs))
+                                             : Object.entries(collectionFilesOptions).map(option => inputLister(option, collectionInputs, setCollectionInputs))}
                                           <div className="col xs12 right-align">
                                              <Button type="submit">Save</Button>
                                           </div>
@@ -260,7 +375,7 @@ const Builder = () => {
                               </Transition>
                            </TransitionGroup>
                         </Card>
-                        <Card>
+                        <Card save={saveFields}>
                            <Title>Fields</Title>
                            <TransitionGroup>
                               <Transition key={selectedCollectionIndex} timeout={500}>
@@ -269,20 +384,36 @@ const Builder = () => {
                                        duration={state === 'exiting' || state === 'exited' || state !== 'entering' ? 500 : 0}
                                        height={state === 'entered' ? 'auto' : 0}
                                     >
-                                       {selectedCollection.fields
-                                          ? selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))
-                                          : selectedCollection.files.map((file, fileIndex) => (
-                                               <div className="section" key={file.name}>
-                                                  <div>
-                                                     <FieldTitle>{file.label}</FieldTitle>
-                                                     <FieldSubtitle>{file.name}</FieldSubtitle>
-                                                  </div>
-                                                  {file.fields.map((field, fieldIndex) => fieldLister(field, ['files', fileIndex, 'fields', fieldIndex]))}
-                                               </div>
-                                            ))}
-                                       <div className="right-align">
-                                          <Button onClick={() => newWidget(['fields'])}>Add new widget</Button>
-                                       </div>
+                                       {selectedCollection.fields ? (
+                                          <React.Fragment>
+                                             {selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))}
+                                             <div className="right-align">
+                                                <Button onClick={() => newWidget(['fields'])}>Add new widget</Button>
+                                             </div>
+                                          </React.Fragment>
+                                       ) : (
+                                          <React.Fragment>
+                                             {selectedCollection.files.map((file, fileIndex) => (
+                                                <React.Fragment key={file.name}>
+                                                   <div className="section">
+                                                      <IconInfoWrapper onClick={() => selectFile(file, ['files', fileIndex])}>
+                                                         <div>
+                                                            <FieldTitle>{file.label}</FieldTitle>
+                                                            <FieldSubtitle>{file.name}</FieldSubtitle>
+                                                         </div>
+                                                      </IconInfoWrapper>
+                                                      {file.fields.map((field, fieldIndex) => fieldLister(field, ['files', fileIndex, 'fields', fieldIndex]))}
+                                                   </div>
+                                                   <div className="right-align">
+                                                      <Button onClick={() => newWidget(['files', fileIndex, 'fields'])}>Add new widget</Button>
+                                                   </div>
+                                                </React.Fragment>
+                                             ))}
+                                             <div className="right-align">
+                                                <Button onClick={addFile}>Add new file</Button>
+                                             </div>
+                                          </React.Fragment>
+                                       )}
                                     </AnimateHeight>
                                  )}
                               </Transition>
@@ -298,6 +429,18 @@ const Builder = () => {
 }
 
 export default Builder
+
+const pulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(106, 119, 162, 0.4);
+  }
+  70% {
+      box-shadow: 0 0 0 10px rgba(106, 119, 162, 0);
+  }
+  100% {
+      box-shadow: 0 0 0 0 rgba(106, 119, 162, 0);
+  }
+`
 
 const Collections = styled.div`
    position: sticky;
@@ -342,6 +485,7 @@ const Card = styled.div`
    border-radius: 15px;
    padding: 10px 20px;
    margin-bottom: 10px;
+   animation: ${({ save }) => (save ? css`1s ${pulse} ease-out` : 'none')};
 `
 
 const MiniCard = styled.div`
