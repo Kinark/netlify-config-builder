@@ -350,8 +350,9 @@ const Builder = () => {
             <div className="row">
                <div className="col xs12">
                   <div className="right-align">
-                     <Button onClick={() => setImportModalOpen(true)}>Import Yaml</Button>
+                     <Button onClick={() => setImportModalOpen(true)}>Import YML</Button>
                      <Button onClick={() => copy(YAML.stringify(config))}>Copy YML to clipboard</Button>
+                     <Button onClick={() => copy(JSON.stringify(config))}>Copy JSON to clipboard</Button>
                   </div>
                </div>
                <div className="col s5">
