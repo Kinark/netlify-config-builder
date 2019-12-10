@@ -2,17 +2,18 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable function-paren-newline */
 /* eslint-disable no-nested-ternary */
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import Modal from 'react-modal'
 import * as objectPath from 'object-path-immutable'
 import AnimateHeight from 'react-animate-height'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import copy from 'copy-to-clipboard'
-import YAML from 'json-to-pretty-yaml'
+import YAML from 'yaml'
 
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
+import nothingIcon from '~/images/widgets/dog-call.svg'
 import deleteIcon from '~/images/widgets/cross.svg'
 import widgets, { fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
 import Input from '~/components/Input'
@@ -54,6 +55,7 @@ const Builder = () => {
    const [isInputOptionsModalOpen, setInputOptionsModalOpen] = React.useState(false)
    const [isAddWidgetModalOpen, setAddWidgetModalOpen] = React.useState(false)
    const [isFileModalOpen, setFileModalOpen] = React.useState(false)
+   const [isImportModalOpen, setImportModalOpen] = React.useState(false)
 
    // PATHS
    const [newWidgetPath, setNewWidgetPath] = React.useState('')
@@ -65,9 +67,7 @@ const Builder = () => {
    // INPUTS
    const [inputs, setInputs] = useState({})
    const [collectionInputs, setCollectionInputs] = useState({})
-
-   // REFS
-   const fieldsList = useRef(null)
+   const [importInput, setImportInput] = useState('')
 
    const selectedCollection = selectedCollectionIndex === null ? false : config.collections[selectedCollectionIndex]
 
@@ -348,8 +348,22 @@ const Builder = () => {
       setConfig(objectPath.del(config, path))
    }
 
+   const importYaml = () => {
+      setConfig(YAML.parse(importInput))
+      setImportModalOpen(false)
+      setImportInput('')
+   }
+
    return (
       <React.Fragment>
+         <Modal isOpen={isImportModalOpen} onRequestClose={() => setImportModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
+            <textarea value={importInput} onChange={e => setImportInput(e.target.value)} id="" cols="60" rows="10">
+               Paste your YML here
+            </textarea>
+            <div className="right-align">
+               <Button onClick={importYaml}>Import YML</Button>
+            </div>
+         </Modal>
          <Modal isOpen={isFileModalOpen} onRequestClose={() => setFileModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
             {!!selectedFile.file && (
                <IconInfoWrapper nonHoverable>
@@ -404,6 +418,7 @@ const Builder = () => {
             <div className="row">
                <div className="col xs12">
                   <div className="right-align">
+                     <Button onClick={() => setImportModalOpen(true)}>Import Yaml</Button>
                      <Button onClick={() => copy(YAML.stringify(config))}>Copy YML to clipboard</Button>
                   </div>
                </div>
@@ -429,21 +444,24 @@ const Builder = () => {
                   </Collections>
                </div>
                <div className="col s7">
-                  {!selectedCollection ? (
-                     <Card>
-                        <Title>Nothing selected yet</Title>
-                     </Card>
-                  ) : (
-                     <div ref={fieldsList}>
-                        <Card save={saveGeneral}>
-                           <Title>General</Title>
-                           <TransitionGroup>
-                              <Transition key={selectedCollectionIndex} timeout={500}>
-                                 {state => (
-                                    <AnimateHeight
-                                       duration={state === 'exiting' || state === 'exited' || state !== 'entering' ? 500 : 0}
-                                       height={state === 'entered' ? 'auto' : 0}
-                                    >
+                  <TransitionGroup>
+                     <Transition key={selectedCollectionIndex} timeout={500}>
+                        {state => (
+                           <AnimateHeight
+                              duration={state === 'exiting' || state === 'exited' || state !== 'entering' ? 500 : 0}
+                              height={state === 'entered' ? 'auto' : 0}
+                           >
+                              {!selectedCollection ? (
+                                 <Card>
+                                    <div className="center">
+                                       <img src={nothingIcon} alt="" />
+                                       <Title>Nothing selected yet</Title>
+                                    </div>
+                                 </Card>
+                              ) : (
+                                 <div>
+                                    <Card save={saveGeneral}>
+                                       <Title>General</Title>
                                        <form className="row" onSubmit={onModifyCollection}>
                                           {selectedCollection.fields
                                              ? Object.entries(collectionFolderOptions).map(option => inputLister(option, collectionInputs, setCollectionInputs))
@@ -452,20 +470,9 @@ const Builder = () => {
                                              <Button type="submit">Save</Button>
                                           </div>
                                        </form>
-                                    </AnimateHeight>
-                                 )}
-                              </Transition>
-                           </TransitionGroup>
-                        </Card>
-                        <Card save={saveFields}>
-                           <Title>Fields</Title>
-                           <TransitionGroup>
-                              <Transition key={selectedCollectionIndex} timeout={500}>
-                                 {state => (
-                                    <AnimateHeight
-                                       duration={state === 'exiting' || state === 'exited' || state !== 'entering' ? 500 : 0}
-                                       height={state === 'entered' ? 'auto' : 0}
-                                    >
+                                    </Card>
+                                    <Card save={saveFields}>
+                                       <Title>Fields</Title>
                                        {selectedCollection.fields ? (
                                           <React.Fragment>
                                              {selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))}
@@ -499,18 +506,21 @@ const Builder = () => {
                                              </div>
                                           </React.Fragment>
                                        )}
-                                    </AnimateHeight>
-                                 )}
-                              </Transition>
-                           </TransitionGroup>
-                        </Card>
-                     </div>
-                  )}
+                                    </Card>
+                                 </div>
+                              )}
+                           </AnimateHeight>
+                        )}
+                     </Transition>
+                  </TransitionGroup>
                </div>
             </div>
          </div>
          <div className="center">
-         Made with <Heart>&#9829;</Heart> by <a targer="_blank" href="https://marcossi.com/en">Marcossi Design</a>
+            Made with <Heart>&#9829;</Heart> by{' '}
+            <a target="_blank" rel="noopener noreferrer" href="https://marcossi.com/en">
+               Marcossi Design
+            </a>
          </div>
       </React.Fragment>
    )
@@ -532,7 +542,7 @@ const pulse = keyframes`
 
 const Heart = styled.span`
    color: #e25555;
-`;
+`
 
 const Collections = styled.div`
    position: sticky;
