@@ -16,6 +16,7 @@ import objectIcon from '~/images/widgets/sitemap1.svg'
 export const collectionFolderOptions = {
    label: { type: 'string', defaultsTo: '' },
    name: { type: 'string', defaultsTo: '' },
+   slug: { type: 'string', defaultsTo: '' },
    folder: { type: 'string', defaultsTo: '' },
    create: { type: 'boolean', defaultsTo: true },
    identifier_field: { type: 'string', defaultsTo: '' }
@@ -157,7 +158,7 @@ export default [
       widget: 'number',
       options: {
          default: { type: 'number', defaultsTo: 0 },
-         valueType: { type: 'select', options: ['int', 'float'], defaultsTo: 7 },
+         valueType: { type: 'select', options: ['int', 'float'], defaultsTo: 'int' },
          min: { type: 'number', defaultsTo: '' },
          max: { type: 'number', defaultsTo: '' },
          step: { type: 'number', defaultsTo: 1 }
