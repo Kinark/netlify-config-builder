@@ -1,15 +1,15 @@
 import { hot } from 'react-hot-loader/root'
-import React from 'react';
+import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
 
-import { Metas } from '~/components/Metas';
-import Favicon from '~/components/Favicon';
-import AppRoutes from '~/components/AppRoutes';
+import { Metas } from '~/components/Metas'
+import Favicon from '~/components/Favicon'
+import AppRoutes from '~/components/AppRoutes'
 
 const App = () => (
    <BrowserRouter>
-      <Metas title="Netlify Config Builder" description="" />
+      <Metas title="Netlify Config Builder" description="Stop messing around with YML" />
       <Favicon />
       <AppRoutes />
       <GlobalStyle />
