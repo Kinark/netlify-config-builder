@@ -9,7 +9,7 @@ import AppRoutes from '~/components/AppRoutes';
 
 const App = () => (
    <BrowserRouter>
-      <Metas title="Sample Website" description="" />
+      <Metas title="Netlify Config Builder" description="" />
       <Favicon />
       <AppRoutes />
       <GlobalStyle />
