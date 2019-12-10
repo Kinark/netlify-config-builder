@@ -23,6 +23,13 @@ export const collectionFolderOptions = {
 
 export const collectionFilesOptions = {
    label: { type: 'string', defaultsTo: '' },
+   name: { type: 'string', defaultsTo: '' },
+   delete: { type: 'boolean', defaultsTo: false }
+}
+
+export const fileOptions = {
+   file: { type: 'string', defaultsTo: '' },
+   label: { type: 'string', defaultsTo: '' },
    name: { type: 'string', defaultsTo: '' }
 }
 
