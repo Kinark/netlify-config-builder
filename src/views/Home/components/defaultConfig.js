@@ -20,19 +20,8 @@ export default {
                default: 'project-page'
             },
             {
-               label: 'Template Key EN',
-               name: 'templateKeyEn',
-               widget: 'hidden',
-               default: 'project-page.en'
-            },
-            {
                label: 'Title',
                name: 'title',
-               widget: 'string'
-            },
-            {
-               label: 'Title EN',
-               name: 'titleEn',
                widget: 'string'
             },
             {
@@ -47,29 +36,14 @@ export default {
                widget: 'markdown'
             },
             {
-               label: 'Excerpt EN',
-               name: 'excerptEn',
-               widget: 'markdown'
-            },
-            {
                label: 'Description',
                name: 'description',
-               widget: 'markdown'
-            },
-            {
-               label: 'Description EN',
-               name: 'descriptionEn',
                widget: 'markdown'
             },
             {
                label: 'Publish Date',
                name: 'date',
                widget: 'datetime'
-            },
-            {
-               label: 'Featured Image',
-               name: 'featuredimage',
-               widget: 'image'
             },
             {
                label: 'External link',
@@ -114,12 +88,6 @@ export default {
                      name: 'templateKey',
                      widget: 'hidden',
                      default: 'index-page'
-                  },
-                  {
-                     label: 'Template Key En',
-                     name: 'templateKeyEn',
-                     widget: 'hidden',
-                     default: ''
                   }
                ]
             },
@@ -133,12 +101,6 @@ export default {
                      name: 'templateKey',
                      widget: 'hidden',
                      default: 'index-page'
-                  },
-                  {
-                     label: 'Template Key En',
-                     name: 'templateKeyEn',
-                     widget: 'hidden',
-                     default: ''
                   }
                ]
             }
