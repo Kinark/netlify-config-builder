@@ -36,8 +36,6 @@ const Builder = () => {
    const [selectedFile, setSelectedFile] = useState({})
    const [selectedField, setSelectedField] = useState({})
 
-   const [selectedPath, setSelectedPath] = useState([])
-
    // MODALS
    const [isInputOptionsModalOpen, setInputOptionsModalOpen] = React.useState(false)
    const [isAddWidgetModalOpen, setAddWidgetModalOpen] = React.useState(false)
