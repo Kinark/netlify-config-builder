@@ -10,7 +10,6 @@ import AnimateHeight from 'react-animate-height'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import copy from 'copy-to-clipboard'
 import YAML from 'yaml'
-import randomWords from 'random-words'
 
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
@@ -54,6 +53,8 @@ const Builder = () => {
    const [selectedFile, setSelectedFile] = useState({})
    const [selectedField, setSelectedField] = useState({})
 
+   const [selectedPath, setSelectedPath] = useState([])
+
    // MODALS
    const [isInputOptionsModalOpen, setInputOptionsModalOpen] = React.useState(false)
    const [isAddWidgetModalOpen, setAddWidgetModalOpen] = React.useState(false)
@@ -89,15 +90,6 @@ const Builder = () => {
    }
 
    // SELECTERS
-   const selectField = (field, widget, fieldPath) => {
-      const initialValues = {}
-      Object.entries(commonWidgetOptions).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
-      Object.entries(widget.options).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
-      setInputs({ ...initialValues, ...field })
-      setSelectedField({ field, widget, fieldPath })
-      setInputOptionsModalOpen(true)
-   }
-
    const selectCollection = i => {
       setSelectedCollectionIndex(i)
       const collection = config.collections[i]
@@ -113,6 +105,15 @@ const Builder = () => {
       setInputs({ ...initialValues, ...file })
       setSelectedFile({ file, filePath })
       setFileModalOpen(true)
+   }
+
+   const selectField = (field, widget, fieldPath) => {
+      const initialValues = {}
+      Object.entries(commonWidgetOptions).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
+      Object.entries(widget.options).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
+      setInputs({ ...initialValues, ...field })
+      setSelectedField({ field, widget, fieldPath })
+      setInputOptionsModalOpen(true)
    }
 
    // LISTERS
