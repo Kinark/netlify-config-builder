@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 
-const Toggle = ({ children, ...rest }) => (
+const Toggle = ({ name, children, ...rest }) => (
    <CheckBoxWrapper>
-      <CheckBox id="checkbox" type="checkbox" {...rest} />
-      <CheckBoxLabel htmlFor="checkbox" />
+      <CheckBox id={name} type="checkbox" name={name} {...rest} />
+      <CheckBoxLabel htmlFor={name} />
       <Label>{children}</Label>
    </CheckBoxWrapper>
 )
