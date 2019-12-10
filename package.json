@@ -93,6 +93,7 @@
       "react": "^16.8.6",
       "react-animate-height": "^2.0.17",
       "react-dom": "^16.8.6",
+      "react-ga": "^2.7.0",
       "react-helmet": "^6.0.0-beta",
       "react-modal": "^3.11.1",
       "react-router-dom": "^5.0.1",

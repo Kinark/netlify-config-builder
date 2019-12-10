@@ -2,19 +2,24 @@ import { hot } from 'react-hot-loader/root'
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { createGlobalStyle } from 'styled-components'
+import ReactGA from 'react-ga'
 
 import { Metas } from '~/components/Metas'
 import Favicon from '~/components/Favicon'
 import AppRoutes from '~/components/AppRoutes'
 
-const App = () => (
-   <BrowserRouter>
-      <Metas title="Netlify Config Builder" description="Stop messing around with YML" />
-      <Favicon />
-      <AppRoutes />
-      <GlobalStyle />
-   </BrowserRouter>
-)
+const App = () => {
+   ReactGA.initialize('UA-128647381-4')
+   ReactGA.pageview(window.location.pathname + window.location.search)
+   return (
+      <BrowserRouter>
+         <Metas title="Netlify Config Builder" description="Stop messing around with YML" />
+         <Favicon />
+         <AppRoutes />
+         <GlobalStyle />
+      </BrowserRouter>
+   )
+}
 
 export default hot(App)
 
