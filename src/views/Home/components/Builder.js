@@ -16,7 +16,8 @@ import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
 import nothingIcon from '~/images/widgets/dog-call.svg'
 import deleteIcon from '~/images/widgets/cross.svg'
-import widgets, { fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
+import widgets from '~/constants/widgets'
+import { templates, fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
 import Input from '~/components/Input'
 import Toggle from '~/components/Toggle'
 import Button from '~/components/Button'
@@ -34,7 +35,8 @@ const customStyles = {
       transform: 'translate(-50%, -50%)',
       borderRadius: '15px',
       border: 'none',
-      maxWidth: '720px'
+      maxWidth: '720px',
+      width: '90%'
    },
    overlay: {
       backdropFilter: 'blur(5px)',
@@ -259,93 +261,17 @@ const Builder = () => {
    }
 
    const addWidget = widget => {
-      const random = randomWords()
-      const newWidgetObject = {
-         label: random.replace(/^\w/, c => c.toUpperCase()),
-         name: random,
-         required: true,
-         widget: widget.widget,
-         hint: ''
-      }
-      Object.entries(widget.options).map(([optionName, optionSettings]) => (newWidgetObject[optionName] = optionSettings.defaultsTo || ''))
-      const newConfig = objectPath.push(config, newWidgetPath, newWidgetObject)
-      setConfig(newConfig)
+      setConfig(objectPath.push(config, newWidgetPath, templates.widget(widget)))
       setAddWidgetModalOpen(false)
       triggerSaveFxFields()
    }
 
    // ADD NEW STUFF METHODS
-   const addFile = () => {
-      const random = randomWords()
-      const newFileObject = {
-         file: `src/pages/${random}.md`,
-         label: random.replace(/^\w/, c => c.toUpperCase()),
-         name: random,
-         fields: [
-            {
-               label: 'Title',
-               name: 'title',
-               widget: 'string',
-               default: '',
-               required: true,
-               hint: ''
-            }
-         ]
-      }
-      const newConfig = objectPath.push(config, ['collections', selectedCollectionIndex, 'files'], newFileObject)
-      setConfig(newConfig)
-   }
+   const addFile = () => setConfig(objectPath.push(config, ['collections', selectedCollectionIndex, 'files'], templates.file()))
 
-   const addFolderCollection = () => {
-      const random = randomWords()
-      const newFileObject = {
-         name: random,
-         label: random.replace(/^\w/, c => c.toUpperCase()),
-         folder: `src/pages/${random}`,
-         create: true,
-         slug: '{{slug}}',
-         fields: [
-            {
-               label: 'Title',
-               name: 'title',
-               widget: 'string',
-               default: '',
-               required: true,
-               hint: ''
-            }
-         ]
-      }
-      const newConfig = objectPath.push(config, ['collections'], newFileObject)
-      setConfig(newConfig)
-   }
+   const addFolderCollection = () => setConfig(objectPath.push(config, ['collections'], templates.folderCollection()))
 
-   const addFilesCollection = () => {
-      const random = randomWords()
-      const newFileObject = {
-         name: random,
-         label: random.replace(/^\w/, c => c.toUpperCase()),
-         delete: false,
-         files: [
-            {
-               file: 'src/pages/newFile.md',
-               label: 'New File',
-               name: 'index',
-               fields: [
-                  {
-                     label: 'Title',
-                     name: 'title',
-                     widget: 'string',
-                     default: '',
-                     required: true,
-                     hint: ''
-                  }
-               ]
-            }
-         ]
-      }
-      const newConfig = objectPath.push(config, ['collections'], newFileObject)
-      setConfig(newConfig)
-   }
+   const addFilesCollection = () => setConfig(objectPath.push(config, ['collections'], templates.filesCollection()))
 
    // DELETE STUFF METHODS
    const deleteItem = (e, path) => {
