@@ -22,6 +22,8 @@ const Label = styled.div`
 
 const CheckBoxWrapper = styled.div`
    position: relative;
+   display: inline-block;
+   margin-right: 15px;
 `
 const CheckBoxLabel = styled.label`
    position: absolute;
