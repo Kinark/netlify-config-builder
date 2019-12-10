@@ -15,6 +15,7 @@ import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
 import nothingIcon from '~/images/widgets/dog-call.svg'
 import deleteIcon from '~/images/widgets/cross.svg'
+import modalStyles from '~/constants/modalStyles'
 import widgets from '~/constants/widgets'
 import { templates, fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
 import Input from '~/components/Input'
@@ -23,25 +24,6 @@ import Button from '~/components/Button'
 import Select from '~/components/Select'
 
 import defaultConfig from './defaultConfig'
-
-const customStyles = {
-   content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-      borderRadius: '15px',
-      border: 'none',
-      maxWidth: '720px',
-      width: '90%'
-   },
-   overlay: {
-      backdropFilter: 'blur(5px)',
-      backgroundColor: 'rgba(0,0,0,0.25)'
-   }
-}
 
 Modal.setAppElement('#root')
 
@@ -288,7 +270,7 @@ const Builder = () => {
 
    return (
       <React.Fragment>
-         <Modal isOpen={isImportModalOpen} onRequestClose={() => setImportModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
+         <Modal isOpen={isImportModalOpen} onRequestClose={() => setImportModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
             <textarea value={importInput} onChange={e => setImportInput(e.target.value)} id="" cols="60" rows="10">
                Paste your YML here
             </textarea>
@@ -296,7 +278,7 @@ const Builder = () => {
                <Button onClick={importYaml}>Import YML</Button>
             </div>
          </Modal>
-         <Modal isOpen={isFileModalOpen} onRequestClose={() => setFileModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
+         <Modal isOpen={isFileModalOpen} onRequestClose={() => setFileModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
             {!!selectedFile.file && (
                <IconInfoWrapper nonHoverable>
                   <div>
@@ -316,7 +298,7 @@ const Builder = () => {
                </IconInfoWrapper>
             )}
          </Modal>
-         <Modal isOpen={isInputOptionsModalOpen} onRequestClose={() => setInputOptionsModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
+         <Modal isOpen={isInputOptionsModalOpen} onRequestClose={() => setInputOptionsModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
             {!!selectedField.widget && (
                <IconInfoWrapper nonHoverable>
                   <img src={selectedField.widget.icon} alt="" />
@@ -337,7 +319,7 @@ const Builder = () => {
                </IconInfoWrapper>
             )}
          </Modal>
-         <Modal isOpen={isAddWidgetModalOpen} onRequestClose={() => setAddWidgetModalOpen(false)} style={customStyles} closeTimeoutMS={300}>
+         <Modal isOpen={isAddWidgetModalOpen} onRequestClose={() => setAddWidgetModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
             <Title>Add widget</Title>
             {widgets.map(widget => (
                <MiniCard key={widget.name} onClick={() => addWidget(widget)}>
