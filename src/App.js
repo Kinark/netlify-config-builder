@@ -8,20 +8,17 @@ import { Metas } from '~/components/Metas'
 import Favicon from '~/components/Favicon'
 import AppRoutes from '~/components/AppRoutes'
 
-const App = () => {
-   useEffect(() => {
-      ReactGA.initialize('UA-128647381-4')
-      ReactGA.pageview(window.location.pathname + window.location.search)
-   }, [])
-   return (
-      <BrowserRouter>
-         <Metas title="Netlify Config Builder" description="Stop messing around with YML" />
-         <Favicon />
-         <AppRoutes />
-         <GlobalStyle />
-      </BrowserRouter>
-   )
-}
+ReactGA.initialize('UA-128647381-4')
+ReactGA.pageview(window.location.pathname + window.location.search)
+
+const App = () => (
+   <BrowserRouter>
+      <Metas title="Netlify Config Builder" description="Stop messing around with YML" />
+      <Favicon />
+      <AppRoutes />
+      <GlobalStyle />
+   </BrowserRouter>
+)
 
 export default hot(App)
 
