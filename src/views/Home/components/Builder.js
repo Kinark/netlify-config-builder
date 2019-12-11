@@ -334,7 +334,7 @@ const Builder = () => {
                      <Button onClick={() => copy(JSON.stringify(config))}>Copy JSON to clipboard</Button>
                   </div>
                </div>
-               <div className="col s5">
+               <div className="col xs12 m5">
                   <Collections>
                      <Title>Collections</Title>
                      <div className="section">
@@ -355,7 +355,7 @@ const Builder = () => {
                      <Button onClick={addFilesCollection}>Add files collection</Button>
                   </Collections>
                </div>
-               <div className="col s7">
+               <div className="col xs12 m7">
                   <TransitionGroup>
                      <Transition key={selectedCollectionIndex} timeout={500}>
                         {state => (
