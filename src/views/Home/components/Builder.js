@@ -297,7 +297,7 @@ const Builder = () => {
          </Modal>
          <Modal isOpen={isInputOptionsModalOpen} onRequestClose={() => setInputOptionsModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
             {!!selectedField.widget && (
-               <IconInfoWrapper nonHoverable>
+               <IconInfoWrapper bigInfo nonHoverable>
                   <img src={selectedField.widget.icon} alt="" />
                   <div>
                      <div className="row">
@@ -467,7 +467,7 @@ const Title = styled.h4`
 `
 
 const IconInfoWrapper = styled.div`
-   align-items: flex-start;
+   align-items: ${({ bigInfo }) => (bigInfo ? 'flex-start' : 'center')};
    display: flex;
    margin-bottom: 2px;
    border-radius: 10px;
@@ -476,7 +476,7 @@ const IconInfoWrapper = styled.div`
    background-color: ${({ active }) => (active ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0)')};
    transition: 300ms background-color ease-out;
    img {
-      margin-top: 5px;
+      margin-top: ${({ bigInfo }) => (bigInfo ? '3px' : '0')};
       margin-right: 10px;
    }
    &:hover {
