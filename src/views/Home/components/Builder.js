@@ -3,7 +3,7 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable no-nested-ternary */
 import React, { useState } from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled from 'styled-components'
 import Modal from 'react-modal'
 import * as objectPath from 'object-path-immutable'
 import AnimateHeight from 'react-animate-height'
@@ -23,6 +23,7 @@ import Textarea from '~/components/Textarea'
 import Toggle from '~/components/Toggle'
 import Button from '~/components/Button'
 import Select from '~/components/Select'
+import Pulse from '~/components/Pulse'
 
 import defaultConfig from './defaultConfig'
 
@@ -90,8 +91,9 @@ const Builder = () => {
 
    const selectField = (field, widget, fieldPath) => {
       const initialValues = {}
-      Object.entries(commonWidgetOptions).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
-      Object.entries(widget.options).map(([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || ''))
+      Object.entries({ ...commonWidgetOptions, ...widget.options }).map(
+         ([optionName, optionSettings]) => (initialValues[optionName] = optionSettings.defaultsTo || '')
+      )
       setInputs({ ...initialValues, ...field })
       setSelectedField({ field, widget, fieldPath })
       setInputOptionsModalOpen(true)
@@ -207,16 +209,16 @@ const Builder = () => {
    }
 
    // ON SUBMIT HANDLERS
-   const onModifyField = e => {
+   const onModifyField = (e, cb) => {
       e.preventDefault()
       const newField = { ...selectedField.field, ...inputs }
       const prefixedPath = ['collections', selectedCollectionIndex, ...selectedField.fieldPath]
       setConfig(objectPath.set(config, prefixedPath, newField))
       setInputOptionsModalOpen(false)
-      triggerSaveFxFields()
+      if (cb) cb()
    }
 
-   const onModifyCollection = e => {
+   const onModifyCollection = (e, cb) => {
       e.preventDefault()
       const newCollectionInputs = { ...collectionInputs }
       delete newCollectionInputs.fields
@@ -224,16 +226,16 @@ const Builder = () => {
       const newCollection = { ...selectedCollection, ...newCollectionInputs }
       const prefixedPath = ['collections', selectedCollectionIndex]
       setConfig(objectPath.set(config, prefixedPath, newCollection))
-      triggerSaveFxGeneral()
+      if (cb) cb()
    }
 
-   const onModifyFile = e => {
+   const onModifyFile = (e, cb) => {
       e.preventDefault()
       const newFile = { ...selectedFile.file, ...inputs }
       const prefixedPath = ['collections', selectedCollectionIndex, ...selectedFile.filePath]
       setConfig(objectPath.set(config, prefixedPath, newFile))
       setFileModalOpen(false)
-      triggerSaveFxFields()
+      if (cb) cb()
    }
 
    // NEW WIDGET MODAL METHODS
@@ -295,27 +297,6 @@ const Builder = () => {
                </IconInfoWrapper>
             )}
          </Modal>
-         <Modal isOpen={isInputOptionsModalOpen} onRequestClose={() => setInputOptionsModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
-            {!!selectedField.widget && (
-               <IconInfoWrapper bigInfo nonHoverable>
-                  <img src={selectedField.widget.icon} alt="" />
-                  <div>
-                     <div className="row">
-                        <div className="col xs12">
-                           <FieldTitle big>{inputs.label}</FieldTitle>
-                           <FieldSubtitle big>{selectedField.widget.widget}</FieldSubtitle>
-                        </div>
-                     </div>
-                     <form className="row no-mrg" onSubmit={onModifyField}>
-                        {Object.entries({ ...commonWidgetOptions, ...selectedField.widget.options }).map(option => inputLister(option, inputs, setInputs))}
-                        <div className="col xs12 right-align">
-                           <Button type="submit">Save</Button>
-                        </div>
-                     </form>
-                  </div>
-               </IconInfoWrapper>
-            )}
-         </Modal>
          <Modal isOpen={isAddWidgetModalOpen} onRequestClose={() => setAddWidgetModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
             <Title>Add widget</Title>
             {widgets.map(widget => (
@@ -330,8 +311,30 @@ const Builder = () => {
                <div className="col xs12">
                   <div className="section right-align">
                      <Button onClick={() => setImportModalOpen(true)}>Import YML</Button>
-                     <Button onClick={() => copy(YAML.stringify(config))}>Copy YML to clipboard</Button>
-                     <Button onClick={() => copy(JSON.stringify(config))}>Copy JSON to clipboard</Button>
+                     <Pulse>
+                        {pulse => (
+                           <Button
+                              onClick={() => {
+                                 pulse()
+                                 copy(YAML.stringify(config))
+                              }}
+                           >
+                              Copy YML to clipboard
+                           </Button>
+                        )}
+                     </Pulse>
+                     <Pulse>
+                        {pulse => (
+                           <Button
+                              onClick={() => {
+                                 pulse()
+                                 copy(JSON.stringify(config))
+                              }}
+                           >
+                              Copy JSON to clipboard
+                           </Button>
+                        )}
+                     </Pulse>
                   </div>
                </div>
                <div className="col xs12 m5">
@@ -372,53 +375,97 @@ const Builder = () => {
                                  </Card>
                               ) : (
                                  <div>
-                                    <Card save={saveGeneral}>
-                                       <Title>General</Title>
-                                       <form className="row" onSubmit={onModifyCollection}>
-                                          {selectedCollection.fields
-                                             ? Object.entries(collectionFolderOptions).map(option => inputLister(option, collectionInputs, setCollectionInputs))
-                                             : Object.entries(collectionFilesOptions).map(option => inputLister(option, collectionInputs, setCollectionInputs))}
-                                          <div className="col xs12 right-align">
-                                             <Button type="submit">Save</Button>
-                                          </div>
-                                       </form>
-                                    </Card>
-                                    <Card save={saveFields}>
-                                       <Title>Fields</Title>
-                                       {selectedCollection.fields ? (
-                                          <React.Fragment>
-                                             {selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))}
-                                             <div className="right-align">
-                                                <Button onClick={() => newWidget(['fields'])}>Add new widget</Button>
-                                             </div>
-                                          </React.Fragment>
-                                       ) : (
-                                          <React.Fragment>
-                                             {selectedCollection.files.map((file, fileIndex) => (
-                                                <React.Fragment key={file.name}>
-                                                   <div className="section">
-                                                      <IconInfoWrapper onClick={() => selectFile(file, ['files', fileIndex])}>
-                                                         <div>
-                                                            <FieldTitle>{file.label}</FieldTitle>
-                                                            <FieldSubtitle>{file.name}</FieldSubtitle>
+                                    <Pulse>
+                                       {pulse => (
+                                          <Card>
+                                             <Title>General</Title>
+                                             <form className="row" onSubmit={e => onModifyCollection(e, pulse)}>
+                                                {selectedCollection.fields
+                                                   ? Object.entries(collectionFolderOptions).map(option =>
+                                                        inputLister(option, collectionInputs, setCollectionInputs)
+                                                     )
+                                                   : Object.entries(collectionFilesOptions).map(option =>
+                                                        inputLister(option, collectionInputs, setCollectionInputs)
+                                                     )}
+                                                <div className="col xs12 right-align">
+                                                   <Button type="submit">Save</Button>
+                                                </div>
+                                             </form>
+                                          </Card>
+                                       )}
+                                    </Pulse>
+                                    <Pulse>
+                                       {pulse => (
+                                          <Card>
+                                             <Modal
+                                                isOpen={isInputOptionsModalOpen}
+                                                onRequestClose={() => setInputOptionsModalOpen(false)}
+                                                style={modalStyles}
+                                                closeTimeoutMS={300}
+                                             >
+                                                {!!selectedField.widget && (
+                                                   <IconInfoWrapper bigInfo nonHoverable>
+                                                      <img src={selectedField.widget.icon} alt="" />
+                                                      <div>
+                                                         <div className="row">
+                                                            <div className="col xs12">
+                                                               <FieldTitle big>{inputs.label}</FieldTitle>
+                                                               <FieldSubtitle big>{selectedField.widget.widget}</FieldSubtitle>
+                                                            </div>
                                                          </div>
-                                                         <DeleteBtn onClick={e => deleteItem(e, ['collections', selectedCollectionIndex, 'files', fileIndex])}>
-                                                            <img src={deleteIcon} alt="" />
-                                                         </DeleteBtn>
-                                                      </IconInfoWrapper>
-                                                      {file.fields.map((field, fieldIndex) => fieldLister(field, ['files', fileIndex, 'fields', fieldIndex]))}
-                                                   </div>
+                                                         <form className="row no-mrg" onSubmit={e => onModifyField(e, pulse)}>
+                                                            {Object.entries({ ...commonWidgetOptions, ...selectedField.widget.options }).map(option =>
+                                                               inputLister(option, inputs, setInputs)
+                                                            )}
+                                                            <div className="col xs12 right-align">
+                                                               <Button type="submit">Save</Button>
+                                                            </div>
+                                                         </form>
+                                                      </div>
+                                                   </IconInfoWrapper>
+                                                )}
+                                             </Modal>
+                                             <Title>Fields</Title>
+                                             {selectedCollection.fields ? (
+                                                <React.Fragment>
+                                                   {selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))}
                                                    <div className="right-align">
-                                                      <Button onClick={() => newWidget(['files', fileIndex, 'fields'])}>Add new widget</Button>
+                                                      <Button onClick={() => newWidget(['fields'])}>Add new widget</Button>
                                                    </div>
                                                 </React.Fragment>
-                                             ))}
-                                             <div className="right-align">
-                                                <Button onClick={addFile}>Add new file</Button>
-                                             </div>
-                                          </React.Fragment>
+                                             ) : (
+                                                <React.Fragment>
+                                                   {selectedCollection.files.map((file, fileIndex) => (
+                                                      <React.Fragment key={file.name}>
+                                                         <div className="section">
+                                                            <IconInfoWrapper onClick={() => selectFile(file, ['files', fileIndex])}>
+                                                               <div>
+                                                                  <FieldTitle>{file.label}</FieldTitle>
+                                                                  <FieldSubtitle>{file.name}</FieldSubtitle>
+                                                               </div>
+                                                               <DeleteBtn
+                                                                  onClick={e => deleteItem(e, ['collections', selectedCollectionIndex, 'files', fileIndex])}
+                                                               >
+                                                                  <img src={deleteIcon} alt="" />
+                                                               </DeleteBtn>
+                                                            </IconInfoWrapper>
+                                                            {file.fields.map((field, fieldIndex) =>
+                                                               fieldLister(field, ['files', fileIndex, 'fields', fieldIndex])
+                                                            )}
+                                                         </div>
+                                                         <div className="right-align">
+                                                            <Button onClick={() => newWidget(['files', fileIndex, 'fields'])}>Add new widget</Button>
+                                                         </div>
+                                                      </React.Fragment>
+                                                   ))}
+                                                   <div className="right-align">
+                                                      <Button onClick={addFile}>Add new file</Button>
+                                                   </div>
+                                                </React.Fragment>
+                                             )}
+                                          </Card>
                                        )}
-                                    </Card>
+                                    </Pulse>
                                  </div>
                               )}
                            </AnimateHeight>
@@ -439,18 +486,6 @@ const Builder = () => {
 }
 
 export default Builder
-
-const pulse = keyframes`
-  0% {
-    box-shadow: 0 0 0 0 rgba(106, 119, 162, 0.4);
-  }
-  70% {
-      box-shadow: 0 0 0 10px rgba(106, 119, 162, 0);
-  }
-  100% {
-      box-shadow: 0 0 0 0 rgba(106, 119, 162, 0);
-  }
-`
 
 const Heart = styled.span`
    color: #e25555;
@@ -521,7 +556,6 @@ const Card = styled.div`
    border-radius: 15px;
    padding: 10px 20px;
    margin-bottom: 10px;
-   animation: ${({ save }) => (save ? css`1s ${pulse} ease-out` : 'none')};
 `
 
 const MiniCard = styled.div`
