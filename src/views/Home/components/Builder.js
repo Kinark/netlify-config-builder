@@ -260,7 +260,7 @@ const Builder = () => {
    // DELETE STUFF METHODS
    const deleteItem = (e, path) => {
       e.stopPropagation()
-      setConfig(objectPath.del(config, path))
+      if (confirm('Are you sure you wanna delete this item?')) setConfig(objectPath.del(config, path))
    }
 
    const importYaml = () => {
