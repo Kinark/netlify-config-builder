@@ -46,30 +46,12 @@ const Builder = () => {
    // PATHS
    const [newWidgetPath, setNewWidgetPath] = React.useState('')
 
-   // SAVE EFFECTS
-   const [saveGeneral, setSaveGeneral] = React.useState(false)
-   const [saveFields, setSaveFields] = React.useState(false)
-
    // INPUTS
    const [inputs, setInputs] = useState({})
    const [collectionInputs, setCollectionInputs] = useState({})
    const [importInput, setImportInput] = useState('')
 
    const selectedCollection = selectedCollectionIndex === null ? false : config.collections[selectedCollectionIndex]
-
-   // FX TRIGGERS
-   const triggerSaveFxGeneral = () => {
-      setSaveGeneral(true)
-      setTimeout(() => {
-         setSaveGeneral(false)
-      }, 1000)
-   }
-   const triggerSaveFxFields = () => {
-      setSaveFields(true)
-      setTimeout(() => {
-         setSaveFields(false)
-      }, 1000)
-   }
 
    // SELECTORS
    const selectCollection = i => {
@@ -116,6 +98,7 @@ const Builder = () => {
             </IconInfoWrapper>
             {(field.widget === 'list' || field.widget === 'object') && (
                <Child>
+                  {!!field.field && fieldLister(field.field, [...fieldPath, 'field'])}
                   {!!field.fields && field.fields.map((childField, childFieldIndex) => fieldLister(childField, [...fieldPath, 'fields', childFieldIndex]))}
                   <Button onClick={() => newWidget([...fieldPath, 'fields'])}>Add new widget</Button>
                </Child>
@@ -247,7 +230,6 @@ const Builder = () => {
    const addWidget = widget => {
       setConfig(objectPath.push(config, newWidgetPath, templates.widget(widget)))
       setAddWidgetModalOpen(false)
-      triggerSaveFxFields()
    }
 
    // ADD NEW STUFF METHODS
