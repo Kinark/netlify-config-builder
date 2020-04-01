@@ -2,7 +2,8 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable function-paren-newline */
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react'
+/* eslint-disable no-param-reassign */
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 import * as objectPath from 'object-path-immutable'
@@ -250,6 +251,32 @@ const Builder = () => {
       setImportModalOpen(false)
       setImportInput('')
    }
+
+   useEffect(() => {
+      let wasFixed = false
+      const fixLists = obj => {
+         if (obj instanceof Array) {
+            obj.forEach(el => fixLists(el))
+         } else if (obj instanceof Object) {
+            if (obj.widget === 'list') {
+               if (obj.field && obj.fields) {
+                  obj.fields = [...obj.fields, obj.field]
+                  delete obj.field
+                  wasFixed = true
+               } else if (obj.fields && obj.fields.length === 1) {
+                  obj.field = obj.fields[0]
+                  delete obj.fields
+                  wasFixed = true
+               }
+            } else {
+               Object.keys(obj).forEach(key => fixLists(obj[key]))
+            }
+         }
+      }
+      const newConfig = { ...config }
+      fixLists(newConfig)
+      if (wasFixed) setConfig(newConfig)
+   }, [config])
 
    return (
       <React.Fragment>
