@@ -252,6 +252,7 @@ const Builder = () => {
       setImportInput('')
    }
 
+   // List widget fix
    useEffect(() => {
       let wasFixed = false
       const fixLists = obj => {
