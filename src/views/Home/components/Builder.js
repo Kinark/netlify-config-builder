@@ -14,6 +14,7 @@ import copy from 'copy-to-clipboard'
 import YAML from 'yaml'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
+import useTimeTravel from '~/hooks/useTimeTravel'
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
 import nothingIcon from '~/images/widgets/dog-call.svg'
@@ -33,12 +34,12 @@ import defaultConfig from './defaultConfig'
 Modal.setAppElement('#root')
 
 const Builder = () => {
-   const [config, setConfig] = useState(defaultConfig)
+   const [config, setConfig, undoConfig, redoConfig, pastConfig, futureConfig, setPresentConfig] = useTimeTravel(defaultConfig)
 
    const [transitionCollection, setTransitionCollection] = useState(1)
 
    // SELECTED THINGS
-   const [selectedCollectionIndex, setSelectedCollectionIndex] = useState(null)
+   const [selectedCollectionIndex, setSelectedCollectionIndex, undoSelectedCollection, redoSelectedCollection] = useTimeTravel(null)
    const [selectedFile, setSelectedFile] = useState({})
    const [selectedField, setSelectedField] = useState({})
 
@@ -58,11 +59,32 @@ const Builder = () => {
 
    const selectedCollection = selectedCollectionIndex === null ? false : config.collections[selectedCollectionIndex]
 
+   const undo = () => {
+      undoConfig()
+      undoSelectedCollection()
+   }
+
+   const redo = () => {
+      redoConfig()
+      redoSelectedCollection()
+   }
+
+   const set = {
+      config: (newConfig, willUpdateCollection = true) => {
+         setConfig(newConfig)
+         if (willUpdateCollection) setSelectedCollectionIndex(selectedCollectionIndex)
+      },
+      selectedCollectionIndex: (newSelectedCollectionIndex, willUpdateConfig = true) => {
+         setSelectedCollectionIndex(newSelectedCollectionIndex)
+         if (willUpdateConfig) setConfig(config)
+      }
+   }
+
    // SELECTORS
 
    const selectCollection = (i) => {
       if (i === selectedCollectionIndex) return
-      setSelectedCollectionIndex(i)
+      set.selectedCollectionIndex(i)
       setTransitionCollection(transitionCollection + 1)
       const collection = config.collections[i]
       const initialValues = {}
@@ -227,7 +249,7 @@ const Builder = () => {
       e.preventDefault()
       const newField = { ...selectedField.field, ...inputs }
       const prefixedPath = ['collections', selectedCollectionIndex, ...selectedField.fieldPath]
-      setConfig(objectPath.set(config, prefixedPath, newField))
+      set.config(objectPath.set(config, prefixedPath, newField))
       setInputOptionsModalOpen(false)
       if (cb) cb()
    }
@@ -239,7 +261,7 @@ const Builder = () => {
       delete newCollectionInputs.files
       const newCollection = { ...selectedCollection, ...newCollectionInputs }
       const prefixedPath = ['collections', selectedCollectionIndex]
-      setConfig(objectPath.set(config, prefixedPath, newCollection))
+      set.config(objectPath.set(config, prefixedPath, newCollection))
       if (cb) cb()
    }
 
@@ -247,7 +269,7 @@ const Builder = () => {
       e.preventDefault()
       const newFile = { ...selectedFile.file, ...inputs }
       const prefixedPath = ['collections', selectedCollectionIndex, ...selectedFile.filePath]
-      setConfig(objectPath.set(config, prefixedPath, newFile))
+      set.config(objectPath.set(config, prefixedPath, newFile))
       setFileModalOpen(false)
       if (cb) cb()
    }
@@ -259,27 +281,43 @@ const Builder = () => {
    }
 
    const addWidget = (widget) => {
-      setConfig(objectPath.push(config, newWidgetPath, templates.widget(widget)))
+      set.config(objectPath.push(config, newWidgetPath, templates.widget(widget)))
       setAddWidgetModalOpen(false)
    }
 
    // ADD NEW STUFF METHODS
-   const addFile = () => setConfig(objectPath.push(config, ['collections', selectedCollectionIndex, 'files'], templates.file()))
+   const addFile = () => set.config(objectPath.push(config, ['collections', selectedCollectionIndex, 'files'], templates.file()))
 
-   const addFolderCollection = () => setConfig(objectPath.push(config, ['collections'], templates.folderCollection()))
+   const addFolderCollection = () => set.config(objectPath.push(config, ['collections'], templates.folderCollection()))
 
-   const addFilesCollection = () => setConfig(objectPath.push(config, ['collections'], templates.filesCollection()))
+   const addFilesCollection = () => set.config(objectPath.push(config, ['collections'], templates.filesCollection()))
 
    // DELETE STUFF METHODS
    const deleteItem = (e, path) => {
       e.stopPropagation()
-      if (confirm('Are you sure you wanna delete this item?')) setConfig(objectPath.del(config, path))
+      if (confirm('Are you sure you wanna delete this item?')) set.config(objectPath.del(config, path))
    }
 
    const importYaml = () => {
-      setConfig(YAML.parse(importInput))
+      set.config(YAML.parse(importInput))
       setImportModalOpen(false)
       setImportInput('')
+   }
+
+   const onDragEnd = (result) => {
+      if (!result.destination || result.source.index === result.destination.index) return
+      const draggableIdSplitted = result.draggableId.split('-')
+      draggableIdSplitted.pop()
+      const isCollection = draggableIdSplitted[0] === 'collection'
+      const listPath = isCollection ? 'collections' : ['collections', selectedCollectionIndex, ...draggableIdSplitted]
+      const list = [...objectPath.get(config, listPath)]
+      const [removed] = list.splice(result.source.index, 1)
+      list.splice(result.destination.index, 0, removed)
+      const willUpdateSelectedCollection = selectedCollectionIndex !== null && isCollection && selectedCollectionIndex === result.source.index
+      if (willUpdateSelectedCollection) {
+         set.selectedCollectionIndex(result.destination.index, false)
+      }
+      set.config(objectPath.set(config, listPath, list), !willUpdateSelectedCollection)
    }
 
    // List widget fix
@@ -306,23 +344,8 @@ const Builder = () => {
       }
       const newConfig = { ...config }
       fixLists(newConfig)
-      if (wasFixed) setConfig(newConfig)
+      if (wasFixed) setPresentConfig(newConfig)
    }, [config])
-
-   const onDragEnd = (result) => {
-      if (!result.destination || result.source.index === result.destination.index) return
-      const draggableIdSplitted = result.draggableId.split('-')
-      draggableIdSplitted.pop()
-      const isCollection = draggableIdSplitted[0] === 'collection'
-      const listPath = isCollection ? 'collections' : ['collections', selectedCollectionIndex, ...draggableIdSplitted]
-      const list = [...objectPath.get(config, listPath)]
-      const [removed] = list.splice(result.source.index, 1)
-      list.splice(result.destination.index, 0, removed)
-      if (selectedCollectionIndex !== null && isCollection) {
-         setSelectedCollectionIndex(selectedCollectionIndex === result.source.index ? result.destination.index : result.source.index)
-      }
-      setConfig(objectPath.set(config, listPath, list))
-   }
 
    return (
       <DragDropContext onDragEnd={onDragEnd}>
@@ -387,6 +410,32 @@ const Builder = () => {
                               }}
                            >
                               Copy JSON to clipboard
+                           </Button>
+                        )}
+                     </Pulse>
+                     <Pulse>
+                        {(pulse) => (
+                           <Button
+                              disabled={!pastConfig.length}
+                              onClick={() => {
+                                 pulse()
+                                 undo()
+                              }}
+                           >
+                              Undo
+                           </Button>
+                        )}
+                     </Pulse>
+                     <Pulse>
+                        {(pulse) => (
+                           <Button
+                              disabled={!futureConfig.length}
+                              onClick={() => {
+                                 pulse()
+                                 redo()
+                              }}
+                           >
+                              Redo
                            </Button>
                         )}
                      </Pulse>
