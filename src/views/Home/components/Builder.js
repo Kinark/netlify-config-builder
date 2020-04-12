@@ -435,14 +435,14 @@ const Builder = () => {
                      </div>
                      <Button onClick={addFolderCollection}>Add folder collection</Button>
                      <Button onClick={addFilesCollection}>Add files collection</Button>
+                     <Sidenotes>
+                        Sidenotes:
+                        <ul>
+                           <li>Now you can drag everything to change the orders :D</li>
+                           <li>List's widgets change between field and fields automagically as you add or remove widgets.</li>
+                        </ul>
+                     </Sidenotes>
                   </Collections>
-                  <Sidenotes>
-                     Sidenotes:
-                     <ul>
-                        <li>Now you can drag everything to change the orders :D</li>
-                        <li>List's widgets change between field and fields automagically as you add or remove widgets.</li>
-                     </ul>
-                  </Sidenotes>
                </div>
                <div className="col xs12 m7">
                   <TransitionGroup>
