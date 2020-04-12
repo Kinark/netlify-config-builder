@@ -3,6 +3,7 @@
 /* eslint-disable function-paren-newline */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
+/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
@@ -11,6 +12,7 @@ import AnimateHeight from 'react-animate-height'
 import { Transition, TransitionGroup } from 'react-transition-group'
 import copy from 'copy-to-clipboard'
 import YAML from 'yaml'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
@@ -32,6 +34,8 @@ Modal.setAppElement('#root')
 
 const Builder = () => {
    const [config, setConfig] = useState(defaultConfig)
+
+   const [transitionCollection, setTransitionCollection] = useState(1)
 
    // SELECTED THINGS
    const [selectedCollectionIndex, setSelectedCollectionIndex] = useState(null)
@@ -55,8 +59,11 @@ const Builder = () => {
    const selectedCollection = selectedCollectionIndex === null ? false : config.collections[selectedCollectionIndex]
 
    // SELECTORS
-   const selectCollection = i => {
+
+   const selectCollection = (i) => {
+      if (i === selectedCollectionIndex) return
       setSelectedCollectionIndex(i)
+      setTransitionCollection(transitionCollection + 1)
       const collection = config.collections[i]
       const initialValues = {}
       const configs = collection.fields ? collectionFolderOptions : collectionFilesOptions
@@ -84,32 +91,55 @@ const Builder = () => {
 
    // LISTERS
    const fieldLister = (field, fieldPath) => {
-      const rightWidget = widgets.find(widget => widget.widget === field.widget)
+      const rightWidget = widgets.find((widget) => widget.widget === field.widget)
+      const fieldPathCopy = [...fieldPath]
+      fieldPathCopy.pop()
+      fieldPathCopy.push(field.name)
+      const uniqueKey = fieldPathCopy.join('-')
+      const index = fieldPath[fieldPath.length - 1]
       return (
-         <React.Fragment key={field.name}>
-            <IconInfoWrapper onClick={() => selectField(field, rightWidget, fieldPath)}>
-               <img src={rightWidget.icon} alt="" />
-               <div>
-                  <FieldTitle>{field.label}</FieldTitle>
-                  <FieldSubtitle>{rightWidget.name}</FieldSubtitle>
-               </div>
-               <DeleteBtn onClick={e => deleteItem(e, ['collections', selectedCollectionIndex, ...fieldPath])}>
-                  <img src={deleteIcon} alt="" />
-               </DeleteBtn>
-            </IconInfoWrapper>
-            {(field.widget === 'list' || field.widget === 'object') && (
-               <Child>
-                  {!!field.field && fieldLister(field.field, [...fieldPath, 'field'])}
-                  {!!field.fields && field.fields.map((childField, childFieldIndex) => fieldLister(childField, [...fieldPath, 'fields', childFieldIndex]))}
-                  <Button onClick={() => newWidget([...fieldPath, 'fields'])}>Add new widget</Button>
-               </Child>
+         <Draggable key={uniqueKey} draggableId={uniqueKey} index={index === 'field' ? 0 : index}>
+            {(provided, { isDragging }) => (
+               <DraggableWrapper
+                  isDragging={isDragging}
+                  ref={provided.innerRef}
+                  {...provided.draggableProps}
+                  {...provided.dragHandleProps}
+                  style={provided.draggableProps.style}
+               >
+                  <IconInfoWrapper noMargin onClick={() => selectField(field, rightWidget, fieldPath)}>
+                     <img src={rightWidget.icon} alt="" />
+                     <div>
+                        <FieldTitle>{field.label}</FieldTitle>
+                        <FieldSubtitle>{rightWidget.name}</FieldSubtitle>
+                     </div>
+                     <DeleteBtn onClick={(e) => deleteItem(e, ['collections', selectedCollectionIndex, ...fieldPath])}>
+                        <img src={deleteIcon} alt="" />
+                     </DeleteBtn>
+                  </IconInfoWrapper>
+                  {(field.widget === 'list' || field.widget === 'object') && (
+                     <Child>
+                        <Droppable droppableId={`droppable-${fieldPath[fieldPath.length - 1]}`} type={`${field.name}-SUBFIELDS`}>
+                           {(listProvided) => (
+                              <div ref={listProvided.innerRef} {...listProvided.droppableProps}>
+                                 {!!field.field && fieldLister(field.field, [...fieldPath, 'field'])}
+                                 {!!field.fields &&
+                                    field.fields.map((childField, childFieldIndex) => fieldLister(childField, [...fieldPath, 'fields', childFieldIndex]))}
+                                 {listProvided.placeholder}
+                              </div>
+                           )}
+                        </Droppable>
+                        <Button onClick={() => newWidget([...fieldPath, 'fields'])}>Add new widget</Button>
+                     </Child>
+                  )}
+               </DraggableWrapper>
             )}
-         </React.Fragment>
+         </Draggable>
       )
    }
 
    const inputLister = ([optionName, optionSettings], values, setter) => {
-      const setFunction = e => setter({ ...values, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value })
+      const setFunction = (e) => setter({ ...values, [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value })
       switch (optionSettings.type) {
          case 'string':
             return (
@@ -142,7 +172,7 @@ const Builder = () => {
                      <option disabled value={optionName}>
                         {optionName}
                      </option>
-                     {optionSettings.options.map(option => (
+                     {optionSettings.options.map((option) => (
                         <option key={option} value={option}>
                            {option}
                         </option>
@@ -154,7 +184,7 @@ const Builder = () => {
             return (
                <div key={optionName} className="col xs12">
                   <FieldSubtitle>Available formatting buttons:</FieldSubtitle>
-                  {optionSettings.options.map(option => (
+                  {optionSettings.options.map((option) => (
                      <Toggle
                         name={`${optionName}[${option}]`}
                         key={option}
@@ -163,7 +193,7 @@ const Builder = () => {
                            setter({
                               ...values,
                               [optionName]: values[optionName].includes(option)
-                                 ? values[optionName].filter(crtOpt => crtOpt !== option)
+                                 ? values[optionName].filter((crtOpt) => crtOpt !== option)
                                  : [...values[optionName], option]
                            })
                         }
@@ -180,7 +210,7 @@ const Builder = () => {
                      required
                      name={optionName}
                      value={values[optionName]}
-                     onChange={e => setter({ ...values, [e.target.name]: e.target.value.split(',') })}
+                     onChange={(e) => setter({ ...values, [e.target.name]: e.target.value.split(',') })}
                      type="text"
                   >
                      {optionName}
@@ -223,12 +253,12 @@ const Builder = () => {
    }
 
    // NEW WIDGET MODAL METHODS
-   const newWidget = path => {
+   const newWidget = (path) => {
       setNewWidgetPath(['collections', selectedCollectionIndex, ...path])
       setAddWidgetModalOpen(true)
    }
 
-   const addWidget = widget => {
+   const addWidget = (widget) => {
       setConfig(objectPath.push(config, newWidgetPath, templates.widget(widget)))
       setAddWidgetModalOpen(false)
    }
@@ -255,9 +285,9 @@ const Builder = () => {
    // List widget fix
    useEffect(() => {
       let wasFixed = false
-      const fixLists = obj => {
+      const fixLists = (obj) => {
          if (obj instanceof Array) {
-            obj.forEach(el => fixLists(el))
+            obj.forEach((el) => fixLists(el))
          } else if (obj instanceof Object) {
             if (obj.widget === 'list') {
                if (obj.field && obj.fields) {
@@ -270,7 +300,7 @@ const Builder = () => {
                   wasFixed = true
                }
             } else {
-               Object.keys(obj).forEach(key => fixLists(obj[key]))
+               Object.keys(obj).forEach((key) => fixLists(obj[key]))
             }
          }
       }
@@ -279,10 +309,25 @@ const Builder = () => {
       if (wasFixed) setConfig(newConfig)
    }, [config])
 
+   const onDragEnd = (result) => {
+      if (!result.destination || result.source.index === result.destination.index) return
+      const draggableIdSplitted = result.draggableId.split('-')
+      draggableIdSplitted.pop()
+      const isCollection = draggableIdSplitted[0] === 'collection'
+      const listPath = isCollection ? 'collections' : ['collections', selectedCollectionIndex, ...draggableIdSplitted]
+      const list = [...objectPath.get(config, listPath)]
+      const [removed] = list.splice(result.source.index, 1)
+      list.splice(result.destination.index, 0, removed)
+      if (selectedCollectionIndex !== null && isCollection) {
+         setSelectedCollectionIndex(selectedCollectionIndex === result.source.index ? result.destination.index : result.source.index)
+      }
+      setConfig(objectPath.set(config, listPath, list))
+   }
+
    return (
-      <React.Fragment>
+      <DragDropContext onDragEnd={onDragEnd}>
          <Modal isOpen={isImportModalOpen} onRequestClose={() => setImportModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
-            <Textarea value={importInput} onChange={e => setImportInput(e.target.value)} placeholder="Paste your YML here" />
+            <Textarea value={importInput} onChange={(e) => setImportInput(e.target.value)} placeholder="Paste your YML here" />
             <div className="right-align">
                <Button onClick={importYaml}>Import YML</Button>
             </div>
@@ -298,7 +343,7 @@ const Builder = () => {
                         </div>
                      </div>
                      <form className="row no-mrg" onSubmit={onModifyFile}>
-                        {Object.entries({ ...fileOptions }).map(fileOption => inputLister(fileOption, inputs, setInputs))}
+                        {Object.entries({ ...fileOptions }).map((fileOption) => inputLister(fileOption, inputs, setInputs))}
                         <div className="col xs12 right-align">
                            <Button type="submit">Save</Button>
                         </div>
@@ -309,7 +354,7 @@ const Builder = () => {
          </Modal>
          <Modal isOpen={isAddWidgetModalOpen} onRequestClose={() => setAddWidgetModalOpen(false)} style={modalStyles} closeTimeoutMS={300}>
             <Title>Add widget</Title>
-            {widgets.map(widget => (
+            {widgets.map((widget) => (
                <MiniCard key={widget.name} onClick={() => addWidget(widget)}>
                   <img src={widget.icon} alt="" />
                   <div>{widget.name}</div>
@@ -322,7 +367,7 @@ const Builder = () => {
                   <div className="section right-align">
                      <Button onClick={() => setImportModalOpen(true)}>Import YML</Button>
                      <Pulse>
-                        {pulse => (
+                        {(pulse) => (
                            <Button
                               onClick={() => {
                                  pulse()
@@ -334,7 +379,7 @@ const Builder = () => {
                         )}
                      </Pulse>
                      <Pulse>
-                        {pulse => (
+                        {(pulse) => (
                            <Button
                               onClick={() => {
                                  pulse()
@@ -351,27 +396,58 @@ const Builder = () => {
                   <Collections>
                      <Title>Collections</Title>
                      <div className="section">
-                        {config.collections.map((collection, i) => (
-                           <IconInfoWrapper key={collection.label} active={i === selectedCollectionIndex} onClick={() => selectCollection(i)}>
-                              <img src={collection.folder ? folderCollectionIcon : filesCollectionIcon} alt="" />
-                              <div>
-                                 <FieldTitle>{collection.label}</FieldTitle>
-                                 <FieldSubtitle>{collection.folder ? 'Folder' : 'Files'}</FieldSubtitle>
+                        <Droppable droppableId="collectionsDroppable" type="COLLECTIONS">
+                           {(collectionsDroppableProvided) => (
+                              <div ref={collectionsDroppableProvided.innerRef} {...collectionsDroppableProvided.droppableProps}>
+                                 {config.collections.map((collection, i) => (
+                                    <Draggable key={`collection-${collection.name}`} draggableId={`collection-${collection.name}`} index={i}>
+                                       {(provided, { isDragging }) => (
+                                          <DraggableWrapper
+                                             isDragging={isDragging}
+                                             ref={provided.innerRef}
+                                             {...provided.draggableProps}
+                                             {...provided.dragHandleProps}
+                                             style={provided.draggableProps.style}
+                                          >
+                                             <IconInfoWrapper
+                                                noMargin
+                                                key={collection.label}
+                                                active={i === selectedCollectionIndex}
+                                                onClick={() => selectCollection(i)}
+                                             >
+                                                <img src={collection.folder ? folderCollectionIcon : filesCollectionIcon} alt="" />
+                                                <div>
+                                                   <FieldTitle>{collection.label}</FieldTitle>
+                                                   <FieldSubtitle>{collection.folder ? 'Folder' : 'Files'}</FieldSubtitle>
+                                                </div>
+                                                <DeleteBtn onClick={(e) => deleteItem(e, ['collections', i])}>
+                                                   <img src={deleteIcon} alt="" />
+                                                </DeleteBtn>
+                                             </IconInfoWrapper>
+                                          </DraggableWrapper>
+                                       )}
+                                    </Draggable>
+                                 ))}
+                                 {collectionsDroppableProvided.placeholder}
                               </div>
-                              <DeleteBtn onClick={e => deleteItem(e, ['collections', i])}>
-                                 <img src={deleteIcon} alt="" />
-                              </DeleteBtn>
-                           </IconInfoWrapper>
-                        ))}
+                           )}
+                        </Droppable>
                      </div>
                      <Button onClick={addFolderCollection}>Add folder collection</Button>
                      <Button onClick={addFilesCollection}>Add files collection</Button>
                   </Collections>
+                  <Sidenotes>
+                     Sidenotes:
+                     <ul>
+                        <li>Now you can drag everything to change the orders :D</li>
+                        <li>List's widgets change between field and fields automagically as you add or remove widgets.</li>
+                     </ul>
+                  </Sidenotes>
                </div>
                <div className="col xs12 m7">
                   <TransitionGroup>
-                     <Transition key={selectedCollectionIndex} timeout={500}>
-                        {state => (
+                     <Transition key={transitionCollection} timeout={500}>
+                        {(state) => (
                            <AnimateHeight
                               duration={state === 'exiting' || state === 'exited' || state !== 'entering' ? 500 : 0}
                               height={state === 'entered' ? 'auto' : 0}
@@ -386,15 +462,15 @@ const Builder = () => {
                               ) : (
                                  <div>
                                     <Pulse>
-                                       {pulse => (
+                                       {(pulse) => (
                                           <Card>
                                              <Title>General</Title>
-                                             <form className="row" onSubmit={e => onModifyCollection(e, pulse)}>
+                                             <form className="row" onSubmit={(e) => onModifyCollection(e, pulse)}>
                                                 {selectedCollection.fields
-                                                   ? Object.entries(collectionFolderOptions).map(option =>
+                                                   ? Object.entries(collectionFolderOptions).map((option) =>
                                                         inputLister(option, collectionInputs, setCollectionInputs)
                                                      )
-                                                   : Object.entries(collectionFilesOptions).map(option =>
+                                                   : Object.entries(collectionFilesOptions).map((option) =>
                                                         inputLister(option, collectionInputs, setCollectionInputs)
                                                      )}
                                                 <div className="col xs12 right-align">
@@ -405,7 +481,7 @@ const Builder = () => {
                                        )}
                                     </Pulse>
                                     <Pulse>
-                                       {pulse => (
+                                       {(pulse) => (
                                           <Card>
                                              <Modal
                                                 isOpen={isInputOptionsModalOpen}
@@ -423,8 +499,8 @@ const Builder = () => {
                                                                <FieldSubtitle big>{selectedField.widget.widget}</FieldSubtitle>
                                                             </div>
                                                          </div>
-                                                         <form className="row no-mrg" onSubmit={e => onModifyField(e, pulse)}>
-                                                            {Object.entries({ ...commonWidgetOptions, ...selectedField.widget.options }).map(option =>
+                                                         <form className="row no-mrg" onSubmit={(e) => onModifyField(e, pulse)}>
+                                                            {Object.entries({ ...commonWidgetOptions, ...selectedField.widget.options }).map((option) =>
                                                                inputLister(option, inputs, setInputs)
                                                             )}
                                                             <div className="col xs12 right-align">
@@ -438,36 +514,74 @@ const Builder = () => {
                                              <Title>Fields</Title>
                                              {selectedCollection.fields ? (
                                                 <React.Fragment>
-                                                   {selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))}
+                                                   <Droppable droppableId="droppable-1" type="FIELDS">
+                                                      {(provided) => (
+                                                         <div ref={provided.innerRef} {...provided.droppableProps}>
+                                                            {selectedCollection.fields.map((field, fieldIndex) => fieldLister(field, ['fields', fieldIndex]))}
+                                                            {provided.placeholder}
+                                                         </div>
+                                                      )}
+                                                   </Droppable>
                                                    <div className="right-align">
                                                       <Button onClick={() => newWidget(['fields'])}>Add new widget</Button>
                                                    </div>
                                                 </React.Fragment>
                                              ) : (
                                                 <React.Fragment>
-                                                   {selectedCollection.files.map((file, fileIndex) => (
-                                                      <React.Fragment key={file.name}>
-                                                         <div className="section">
-                                                            <IconInfoWrapper onClick={() => selectFile(file, ['files', fileIndex])}>
-                                                               <div>
-                                                                  <FieldTitle>{file.label}</FieldTitle>
-                                                                  <FieldSubtitle>{file.name}</FieldSubtitle>
-                                                               </div>
-                                                               <DeleteBtn
-                                                                  onClick={e => deleteItem(e, ['collections', selectedCollectionIndex, 'files', fileIndex])}
-                                                               >
-                                                                  <img src={deleteIcon} alt="" />
-                                                               </DeleteBtn>
-                                                            </IconInfoWrapper>
-                                                            {file.fields.map((field, fieldIndex) =>
-                                                               fieldLister(field, ['files', fileIndex, 'fields', fieldIndex])
-                                                            )}
+                                                   <Droppable droppableId="filesDroppable" type="FILES">
+                                                      {(filesDroppableProvided) => (
+                                                         <div ref={filesDroppableProvided.innerRef} {...filesDroppableProvided.droppableProps}>
+                                                            {selectedCollection.files.map((file, fileIndex) => (
+                                                               <Draggable key={`files-${file.name}`} draggableId={`files-${file.name}`} index={fileIndex}>
+                                                                  {(filesDraggableProvided, { isDragging }) => (
+                                                                     <DraggableWrapper
+                                                                        isDragging={isDragging}
+                                                                        ref={filesDraggableProvided.innerRef}
+                                                                        {...filesDraggableProvided.draggableProps}
+                                                                        {...filesDraggableProvided.dragHandleProps}
+                                                                        style={filesDraggableProvided.draggableProps.style}
+                                                                     >
+                                                                        <div className="section">
+                                                                           <IconInfoWrapper onClick={() => selectFile(file, ['files', fileIndex])}>
+                                                                              <div>
+                                                                                 <FieldTitle>{file.label}</FieldTitle>
+                                                                                 <FieldSubtitle>{file.name}</FieldSubtitle>
+                                                                              </div>
+                                                                              <DeleteBtn
+                                                                                 onClick={(e) =>
+                                                                                    deleteItem(e, ['collections', selectedCollectionIndex, 'files', fileIndex])
+                                                                                 }
+                                                                              >
+                                                                                 <img src={deleteIcon} alt="" />
+                                                                              </DeleteBtn>
+                                                                           </IconInfoWrapper>
+                                                                           <Droppable droppableId={`droppable-${fileIndex}`} type={`${file.name}-FIELDS`}>
+                                                                              {(widgetsDroppableProvided) => (
+                                                                                 <div
+                                                                                    ref={widgetsDroppableProvided.innerRef}
+                                                                                    {...widgetsDroppableProvided.droppableProps}
+                                                                                 >
+                                                                                    {file.fields.map((field, fieldIndex) =>
+                                                                                       fieldLister(field, ['files', fileIndex, 'fields', fieldIndex])
+                                                                                    )}
+                                                                                    {widgetsDroppableProvided.placeholder}
+                                                                                 </div>
+                                                                              )}
+                                                                           </Droppable>
+                                                                        </div>
+                                                                        <div className="right-align">
+                                                                           <Button onClick={() => newWidget(['files', fileIndex, 'fields'])}>
+                                                                              Add new widget
+                                                                           </Button>
+                                                                        </div>
+                                                                     </DraggableWrapper>
+                                                                  )}
+                                                               </Draggable>
+                                                            ))}
+                                                            {filesDroppableProvided.placeholder}
                                                          </div>
-                                                         <div className="right-align">
-                                                            <Button onClick={() => newWidget(['files', fileIndex, 'fields'])}>Add new widget</Button>
-                                                         </div>
-                                                      </React.Fragment>
-                                                   ))}
+                                                      )}
+                                                   </Droppable>
                                                    <div className="right-align">
                                                       <Button onClick={addFile}>Add new file</Button>
                                                    </div>
@@ -491,11 +605,19 @@ const Builder = () => {
                Marcossi Design
             </a>
          </div>
-      </React.Fragment>
+      </DragDropContext>
    )
 }
 
 export default Builder
+
+const DraggableWrapper = styled.div`
+   background-color: ${({ isDragging }) => (isDragging ? 'white' : 'transparent')};
+   box-shadow: ${({ isDragging }) => (isDragging ? '0px 8px 25px 0px rgba(0,0,0,0.15);' : 'none')};
+   border-radius: 10px;
+   transition: box-shadow 300ms ease-in-out, background-color 300ms ease-in-out;
+   margin-bottom: 2px;
+`
 
 const Heart = styled.span`
    color: #e25555;
@@ -514,7 +636,7 @@ const Title = styled.h4`
 const IconInfoWrapper = styled.div`
    align-items: ${({ bigInfo }) => (bigInfo ? 'flex-start' : 'center')};
    display: flex;
-   margin-bottom: 2px;
+   margin-bottom: ${({ noMargin }) => (noMargin ? '0' : '2px')};
    border-radius: 10px;
    cursor: ${({ nonHoverable }) => (nonHoverable ? 'unset' : 'pointer')};
    padding: 10px;
@@ -586,4 +708,14 @@ const Child = styled.div`
    margin-left: 25px;
    padding-left: 10px;
    border-left: solid 1px #dedede;
+`
+
+const Sidenotes = styled.div`
+   opacity: 0.5;
+   font-size: 13px;
+   padding: 20px 0;
+   ul {
+      margin: 0;
+      padding-left: 23px;
+   }
 `
