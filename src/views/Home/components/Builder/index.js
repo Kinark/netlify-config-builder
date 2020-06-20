@@ -18,7 +18,6 @@ import useTimeTravel from '~/hooks/useTimeTravel'
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
 import filesCollectionIcon from '~/images/widgets/grid.svg'
 import nothingIcon from '~/images/widgets/dog-call.svg'
-import deleteIcon from '~/images/widgets/cross.svg'
 import modalStyles from '~/constants/modalStyles'
 import widgets from '~/constants/widgets'
 import { templates, fileOptions, commonWidgetOptions, collectionFolderOptions, collectionFilesOptions } from '~/constants/configs'
@@ -28,8 +27,13 @@ import Toggle from '~/components/Toggle'
 import Button from '~/components/Button'
 import Select from '~/components/Select'
 import Pulse from '~/components/Pulse'
+import IconInfoWrapper from '~/components/IconInfoWrapper'
+import FieldTitle from '~/components/FieldTitle'
+import FieldSubtitle from '~/components/FieldSubtitle'
 
-import defaultConfig from './defaultConfig'
+import Item from './components/Item'
+
+import defaultConfig from '../defaultConfig'
 
 Modal.setAppElement('#root')
 
@@ -129,16 +133,14 @@ const Builder = () => {
                   {...provided.dragHandleProps}
                   style={provided.draggableProps.style}
                >
-                  <IconInfoWrapper noMargin onClick={() => selectField(field, rightWidget, fieldPath)}>
-                     <img src={rightWidget.icon} alt="" />
-                     <div>
-                        <FieldTitle>{field.label}</FieldTitle>
-                        <FieldSubtitle>{rightWidget.name}</FieldSubtitle>
-                     </div>
-                     <DeleteBtn onClick={(e) => deleteItem(e, ['collections', selectedCollectionIndex, ...fieldPath])}>
-                        <img src={deleteIcon} alt="" />
-                     </DeleteBtn>
-                  </IconInfoWrapper>
+                  <Item
+                     noMargin
+                     icon={rightWidget.icon}
+                     title={field.label}
+                     subtitle={rightWidget.name}
+                     onClick={() => selectField(field, rightWidget, fieldPath)}
+                     onDelete={(e) => deleteItem(e, ['collections', selectedCollectionIndex, ...fieldPath])}
+                  />
                   {(field.widget === 'list' || field.widget === 'object') && (
                      <Child>
                         <Droppable droppableId={`droppable-${fieldPath[fieldPath.length - 1]}`} type={`${field.name}-SUBFIELDS`}>
@@ -458,21 +460,16 @@ const Builder = () => {
                                              {...provided.dragHandleProps}
                                              style={provided.draggableProps.style}
                                           >
-                                             <IconInfoWrapper
-                                                noMargin
+                                             <Item
                                                 key={collection.label}
                                                 active={i === selectedCollectionIndex}
+                                                noMargin
+                                                icon={collection.folder ? folderCollectionIcon : filesCollectionIcon}
+                                                title={collection.label}
+                                                subtitle={collection.folder ? 'Folder' : 'Files'}
                                                 onClick={() => selectCollection(i)}
-                                             >
-                                                <img src={collection.folder ? folderCollectionIcon : filesCollectionIcon} alt="" />
-                                                <div>
-                                                   <FieldTitle>{collection.label}</FieldTitle>
-                                                   <FieldSubtitle>{collection.folder ? 'Folder' : 'Files'}</FieldSubtitle>
-                                                </div>
-                                                <DeleteBtn onClick={(e) => deleteItem(e, ['collections', i])}>
-                                                   <img src={deleteIcon} alt="" />
-                                                </DeleteBtn>
-                                             </IconInfoWrapper>
+                                                onDelete={(e) => deleteItem(e, ['collections', i])}
+                                             />
                                           </DraggableWrapper>
                                        )}
                                     </Draggable>
@@ -591,19 +588,14 @@ const Builder = () => {
                                                                         style={filesDraggableProvided.draggableProps.style}
                                                                      >
                                                                         <div className="section">
-                                                                           <IconInfoWrapper onClick={() => selectFile(file, ['files', fileIndex])}>
-                                                                              <div>
-                                                                                 <FieldTitle>{file.label}</FieldTitle>
-                                                                                 <FieldSubtitle>{file.name}</FieldSubtitle>
-                                                                              </div>
-                                                                              <DeleteBtn
-                                                                                 onClick={(e) =>
-                                                                                    deleteItem(e, ['collections', selectedCollectionIndex, 'files', fileIndex])
-                                                                                 }
-                                                                              >
-                                                                                 <img src={deleteIcon} alt="" />
-                                                                              </DeleteBtn>
-                                                                           </IconInfoWrapper>
+                                                                           <Item
+                                                                              title={file.label}
+                                                                              subtitle={file.name}
+                                                                              onClick={() => selectFile(file, ['files', fileIndex])}
+                                                                              onDelete={(e) =>
+                                                                                 deleteItem(e, ['collections', selectedCollectionIndex, 'files', fileIndex])
+                                                                              }
+                                                                           />
                                                                            <Droppable droppableId={`droppable-${fileIndex}`} type={`${file.name}-FIELDS`}>
                                                                               {(widgetsDroppableProvided) => (
                                                                                  <div
@@ -680,56 +672,6 @@ const Collections = styled.div`
 const Title = styled.h4`
    font-size: 18px;
    text-transform: uppercase;
-`
-
-const IconInfoWrapper = styled.div`
-   align-items: ${({ bigInfo }) => (bigInfo ? 'flex-start' : 'center')};
-   display: flex;
-   margin-bottom: ${({ noMargin }) => (noMargin ? '0' : '2px')};
-   border-radius: 10px;
-   cursor: ${({ nonHoverable }) => (nonHoverable ? 'unset' : 'pointer')};
-   padding: 10px;
-   background-color: ${({ active }) => (active ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0)')};
-   transition: 300ms background-color ease-out;
-   img {
-      margin-top: ${({ bigInfo }) => (bigInfo ? '3px' : '0')};
-      margin-right: 10px;
-   }
-   &:hover {
-      background-color: ${({ nonHoverable }) => (nonHoverable ? 'none' : 'rgba(0, 0, 0, 0.1)')};
-   }
-   position: relative;
-`
-
-const DeleteBtn = styled.button`
-   position: absolute;
-   top: 0;
-   bottom: 0;
-   right: 10px;
-   margin: auto;
-   border-radius: 50%;
-   background-color: rgba(0, 0, 0, 0);
-   transition: 300ms background-color ease-out;
-   height: 40px;
-   width: 40px;
-   display: flex;
-   justify-content: center;
-   &:hover {
-      background-color: ${({ nonHoverable }) => (nonHoverable ? 'none' : 'rgba(0, 0, 0, 0.1)')};
-   }
-   img {
-      margin: 0;
-   }
-`
-
-const FieldTitle = styled.h5`
-   font-size: ${({ big }) => (big ? '18px' : '16px')};
-   margin: 0;
-`
-
-const FieldSubtitle = styled.div`
-   font-size: ${({ big }) => (big ? '16px' : '14px')};
-   opacity: 50%;
 `
 
 const Card = styled.div`
