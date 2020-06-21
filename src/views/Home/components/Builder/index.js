@@ -34,6 +34,7 @@ import FieldTitle from '~/components/FieldTitle'
 import FieldSubtitle from '~/components/FieldSubtitle'
 
 import Item from './components/Item'
+import PulseButton from './components/PulseButton'
 
 import defaultConfig from '../defaultConfig'
 
@@ -418,68 +419,11 @@ const Builder = () => {
                <div className="col xs12">
                   <div className="section right-align">
                      <Button onClick={() => setImportModalOpen(true)}>Import YML</Button>
-                     <Pulse>
-                        {(pulse) => (
-                           <Button
-                              onClick={() => {
-                                 pulse()
-                                 copy(YAML.stringify(config))
-                              }}
-                           >
-                              Copy YML to clipboard
-                           </Button>
-                        )}
-                     </Pulse>
-                     <Pulse>
-                        {(pulse) => (
-                           <Button
-                              onClick={() => {
-                                 pulse()
-                                 copy(JSON.stringify(config))
-                              }}
-                           >
-                              Copy JSON to clipboard
-                           </Button>
-                        )}
-                     </Pulse>
-                     <Pulse>
-                        {(pulse) => (
-                           <Button
-                              onClick={() => {
-                                 pulse()
-                                 downloadDefaultFiles()
-                              }}
-                           >
-                              Download default files
-                           </Button>
-                        )}
-                     </Pulse>
-                     <Pulse>
-                        {(pulse) => (
-                           <Button
-                              disabled={!pastConfig.length}
-                              onClick={() => {
-                                 pulse()
-                                 undo()
-                              }}
-                           >
-                              Undo
-                           </Button>
-                        )}
-                     </Pulse>
-                     <Pulse>
-                        {(pulse) => (
-                           <Button
-                              disabled={!futureConfig.length}
-                              onClick={() => {
-                                 pulse()
-                                 redo()
-                              }}
-                           >
-                              Redo
-                           </Button>
-                        )}
-                     </Pulse>
+                     <PulseButton onClick={() => copy(YAML.stringify(config))}>Copy YML to clipboard</PulseButton>
+                     <PulseButton onClick={() => copy(JSON.stringify(config))}>Copy JSON to clipboard</PulseButton>
+                     <PulseButton onClick={downloadDefaultFiles}>Download default files</PulseButton>
+                     <PulseButton onClick={undo}>Undo</PulseButton>
+                     <PulseButton onClick={redo}>Redo</PulseButton>
                   </div>
                </div>
                <div className="col xs12 m5">
