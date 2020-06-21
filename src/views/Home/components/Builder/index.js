@@ -13,6 +13,8 @@ import { Transition, TransitionGroup } from 'react-transition-group'
 import copy from 'copy-to-clipboard'
 import YAML from 'yaml'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver'
 
 import useTimeTravel from '~/hooks/useTimeTravel'
 import folderCollectionIcon from '~/images/widgets/grid-even.svg'
@@ -322,6 +324,31 @@ const Builder = () => {
       set.config(objectPath.set(config, listPath, list), !willUpdateSelectedCollection)
    }
 
+   // Download default files
+   const downloadDefaultFiles = () => {
+      const { collections } = config
+      const zipContent = new JSZip()
+      collections.forEach((collection) => {
+         if (collection.folder) {
+            zipContent.folder(collection.name)
+         } else {
+            collection.files.forEach((file) => {
+               let fileContent = '---\n'
+               file.fields.forEach((field) => {
+                  if (!field.default) return
+                  fileContent += `${field.name}: ${field.default}\n`
+               })
+               fileContent += '---'
+               zipContent.file(`${file.name}.md`, fileContent)
+            })
+         }
+      })
+      zipContent
+         .generateAsync({ type: 'blob' })
+         .then((content) => saveAs(content, 'defaultFiles.zip'))
+         .catch((err) => console.log(err))
+   }
+
    // List widget fix
    useEffect(() => {
       let wasFixed = false
@@ -412,6 +439,18 @@ const Builder = () => {
                               }}
                            >
                               Copy JSON to clipboard
+                           </Button>
+                        )}
+                     </Pulse>
+                     <Pulse>
+                        {(pulse) => (
+                           <Button
+                              onClick={() => {
+                                 pulse()
+                                 downloadDefaultFiles()
+                              }}
+                           >
+                              Download default files
                            </Button>
                         )}
                      </Pulse>
