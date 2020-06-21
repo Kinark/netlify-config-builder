@@ -22,13 +22,13 @@ button {
 }
 
 .ReactModal__Content {
-   top: 55% !important;
-   transition: top 300ms ease-in-out;
+   transform: translate(-50%, -30%) !important;
+   transition: transform 300ms ease-in-out;
 
    &--after-open {
-      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
    }
    &--before-close {
-      top: 55% !important;
+      transform: translate(-50%, -30%) !important;
    }
 }
