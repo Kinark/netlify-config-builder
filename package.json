@@ -65,7 +65,7 @@
       "imagemin-svgo": "^7.0.0",
       "img-loader": "^3.0.1",
       "mini-css-extract-plugin": "^0.4.4",
-      "node-sass": "^4.10.0",
+      "node-sass": "^7.0.0",
       "path": "^0.12.7",
       "postcss-loader": "^3.0.0",
       "purify-css": "^1.2.5",
